@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>China's new lab-test pricing rules: what they mean for diagnostics</title>
+<meta name="description" content="A learning project based on public documents, by Jade (Qiongyi) Wu">
+<meta property="og:title" content="China's new lab-test pricing rules: what they mean for diagnostics">
+<meta property="og:description" content="A learning project based on public documents, by Jade (Qiongyi) Wu">
+<meta property="og:type" content="article">
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --ink: #1c2126;
+    --ink-2: #4a525b;
+    --line: #dcd9d2;
+    --accent: #1f4e79;        /* the one accent colour */
+    --accent-soft: #e6edf4;
+    /* label colours — always paired with text and a shape */
+    --fact: #1f4e79;   --fact-bg: #e6edf4;
+    --inf: #8a5a00;    --inf-bg: #f6eedc;
+    --ver: #5a5f66;    --ver-bg: #efefed;
+    --ph-bg: #fff3b0;  --ph-ink: #6b4f00;
+    --serif: "Iowan Old Style", "Palatino Linotype", Georgia, "Songti SC", "Noto Serif SC", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); font-size: 17px; line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .skip { position: absolute; left: -9999px; }
+  .skip:focus { left: 16px; top: 8px; background: var(--surface); padding: 8px 12px; z-index: 10; }
+
+  /* Header */
+  header.site { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .topbar { display: flex; justify-content: flex-end; padding-top: 12px; }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .lang button {
+    font: inherit; font-size: 14px; border: 0; background: transparent; color: var(--ink-2);
+    padding: 6px 14px; cursor: pointer; min-height: 36px;
+  }
+  .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .hero { padding: 28px 0 36px; }
+  .kicker { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 6.4vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -.01em; }
+  .subtitle { color: var(--ink-2); margin: 0; font-size: 17px; }
+
+  main section { padding: 40px 0 8px; }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(23px, 4.6vw, 30px); line-height: 1.2; margin: 0 0 8px; }
+  .sec-num { display: block; font-family: var(--sans); font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: .06em; margin-bottom: 4px; }
+  .lead { color: var(--ink-2); margin: 0 0 20px; }
+  h3 { font-size: 18px; line-height: 1.3; margin: 10px 0 8px; }
+
+  /* Labels */
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 600; line-height: 1; padding: 5px 9px; border-radius: 4px;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .tag::before { content: ""; width: 8px; height: 8px; display: inline-block; flex: none; }
+  .tag.fact { color: var(--fact); background: var(--fact-bg); border-color: #c4d3e3; }
+  .tag.fact::before { background: var(--fact); border-radius: 50%; }            /* ● */
+  .tag.inference { color: var(--inf); background: var(--inf-bg); border-color: #e6d3a8; }
+  .tag.inference::before { background: var(--inf); transform: rotate(45deg); }  /* ◆ */
+  .tag.verify { color: var(--ver); background: var(--ver-bg); border: 1px dashed var(--ver); }
+  .tag.verify::before { border: 1.5px dashed var(--ver); border-radius: 50%; width: 6px; height: 6px; } /* ○ */
+
+  /* Placeholders stay visibly marked */
+  mark.ph { background: var(--ph-bg); color: var(--ph-ink); padding: 0 4px; border-radius: 3px; font-family: ui-monospace, Menlo, monospace; font-size: .88em; border: 1px dashed #c9a400; }
+
+  /* Cards */
+  .grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .grid.three { grid-template-columns: repeat(3, 1fr); } }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+  .card p { margin: 0 0 12px; }
+  .field { font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); font-weight: 600; margin: 14px 0 4px; }
+  .orig { font-family: var(--serif); font-size: 15.5px; background: var(--bg); border-left: 3px solid var(--accent); padding: 8px 10px; margin: 0; }
+  .orig p { margin: 0 0 4px; } .orig p:last-child { margin: 0; }
+  .src { font-size: 14px; color: var(--ink-2); margin: 0; }
+  .doc { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin: 0 0 16px; font-size: 15px; }
+  .doc .zh-doc { font-family: var(--serif); font-weight: 600; }
+
+  /* Chart */
+  .chart-box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .chart-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .formula { font-size: 14px; color: var(--ink-2); margin: 0; }
+  .canvas-wrap { position: relative; height: 300px; }
+  @media (min-width: 720px) { .canvas-wrap { height: 360px; } }
+  #chartImg { display: none; width: 100%; height: auto; }
+  .notes { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; font-size: 15px; }
+  .notes li { display: flex; gap: 10px; align-items: flex-start; }
+  .dot { flex: none; width: 14px; height: 14px; margin-top: 4px; border-radius: 50%; }
+  .dot.drop { background: var(--inf); }
+  .dot.ex { background: var(--surface); border: 3px solid var(--accent); }
+  .slider { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .slider label { font-weight: 600; font-size: 15px; display: block; margin-bottom: 6px; }
+  .slider input[type=range] { width: 100%; accent-color: var(--accent); height: 32px; }
+  .live { font-size: 18px; font-weight: 600; margin: 6px 0 0; font-variant-numeric: tabular-nums; }
+  .live.down { color: var(--inf); }
+  .caption { font-size: 14px; color: var(--ink-2); margin: 12px 0 0; }
+
+  /* Workflow */
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; grid-template-columns: 1fr; }
+  .step { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .step.is-verify { border: 1.5px dashed var(--ver); background: #fbfbfa; }
+  .step.is-fact { border: 1.5px solid var(--accent); }
+  .step h3 { margin: 0 0 8px; font-size: 16.5px; }
+  .step ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14.5px; }
+  .step ul li { padding-left: 12px; border-left: 2px solid var(--accent-soft); }
+  .step .num { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .arrow { text-align: center; color: var(--ink-2); font-size: 20px; line-height: 1; padding: 6px 0; }
+  .arrow::before { content: "↓"; }
+  @media (min-width: 900px) {
+    .flow { grid-template-columns: 1fr auto 1fr auto 1fr auto 1.6fr auto 1fr; align-items: stretch; }
+    .arrow { display: flex; align-items: center; padding: 0 4px; }
+    .arrow::before { content: "→"; }
+  }
+  .flow-note { margin: 14px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .flow-note p { margin: 0; flex: 1 1 260px; }
+
+  /* Lists */
+  .qlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .qlist li { background: var(--surface); border: 1px dashed var(--ver); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: baseline; }
+  .qlist li .q { font-weight: 700; color: var(--ver); }
+
+  .prose p { margin: 0 0 10px; }
+  footer.site { margin-top: 48px; border-top: 1px solid var(--line); background: var(--surface); }
+  footer.site p { font-size: 14px; color: var(--ink-2); margin: 0; padding: 22px 0 32px; }
+
+  /* Print: a clean 1–2 page brief */
+  @media print {
+    @page { margin: 14mm; }
+    body { background: #fff; font-size: 10.5pt; line-height: 1.4; }
+    .no-print, .skip { display: none !important; }
+    header.site, footer.site { background: #fff; border: 0; }
+    .hero { padding: 0 0 8pt; }
+    h1 { font-size: 20pt; }
+    h2 { font-size: 13.5pt; }
+    main section { padding: 10pt 0 0; }
+    .lead { margin-bottom: 6pt; }
+    .card, .chart-box, .step, .doc, .flow-note, .qlist li { box-shadow: none; padding: 7pt 9pt; break-inside: avoid; }
+    .grid.three { grid-template-columns: repeat(3, 1fr); gap: 7pt; }
+    .flow { grid-template-columns: 1fr auto 1fr auto 1fr auto 1.6fr auto 1fr; }
+    .arrow { display: flex; align-items: center; padding: 0 2pt; }
+    .arrow::before { content: "→"; }
+    .canvas-wrap { height: auto; }
+    #chart { display: none !important; }
+    #chartImg { display: block; max-height: 62mm; width: auto; margin: 0 auto; }
+    .chart-box { break-inside: avoid; }
+    .tag { font-size: 8pt; padding: 2pt 5pt; }
+    a[data-print-url]::after { content: " (" attr(href) ")"; font-size: 8.5pt; color: var(--ink-2); }
+    .orig { font-size: 10pt; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-t="ui.skip">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <div class="topbar no-print">
+      <div class="lang" role="group" id="langGroup" aria-label="Choose language">
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false" lang="zh">中文</button>
+      </div>
+    </div>
+    <div class="hero">
+      <p class="kicker" data-t="ui.kicker"></p>
+      <h1 data-t="header.title"></h1>
+      <p class="subtitle" data-t="header.subtitle"></p>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <!-- 1. The rules in 30 seconds -->
+  <section aria-labelledby="h-rules">
+    <h2 id="h-rules"><span class="sec-num">01</span><span data-t="rules.heading"></span></h2>
+    <p class="lead" data-t="rules.lead"></p>
+    <div class="doc">
+      <span data-t="rules.docLabel"></span><span class="zh-doc" lang="zh" data-orig="docTitle"></span><span data-t="rules.docPublisher"></span>
+    </div>
+    <div class="grid three" id="factCards"></div>
+  </section>
+
+  <!-- 2. Chart -->
+  <section aria-labelledby="h-chart">
+    <h2 id="h-chart"><span class="sec-num">02</span><span data-t="chart.heading"></span></h2>
+    <p class="lead" data-t="chart.lead"></p>
+    <div class="chart-box">
+      <div class="chart-head">
+        <span class="tag inference" data-t="chart.label"></span>
+        <p class="formula" data-t="chart.formula"></p>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="chart" role="img" aria-label=""></canvas>
+        <img id="chartImg" alt="">
+      </div>
+      <ul class="notes">
+        <li><span class="dot drop" aria-hidden="true"></span><span data-t="chart.noteDrop"></span></li>
+        <li><span class="dot ex" aria-hidden="true"></span><span data-t="chart.note14"></span></li>
+      </ul>
+      <div class="slider no-print">
+        <label for="nSlider" data-t="chart.sliderLabel"></label>
+        <input type="range" id="nSlider" min="1" max="30" step="1" value="11">
+        <p class="live" id="liveText" aria-live="polite"></p>
+      </div>
+      <p class="caption" data-t="chart.caption"></p>
+    </div>
+  </section>
+
+  <!-- 3. Inferences -->
+  <section aria-labelledby="h-inf">
+    <h2 id="h-inf"><span class="sec-num">03</span><span data-t="inferences.heading"></span></h2>
+    <p class="lead" data-t="inferences.lead"></p>
+    <div class="grid three" id="infCards"></div>
+  </section>
+
+  <!-- 4. Workflow -->
+  <section aria-labelledby="h-flow">
+    <h2 id="h-flow"><span class="sec-num">04</span><span data-t="workflow.heading"></span></h2>
+    <p class="lead" data-t="workflow.lead"></p>
+    <ol class="flow" id="flow"></ol>
+    <div class="flow-note">
+      <span class="tag inference" data-t="labels.inference"></span>
+      <p data-t="workflow.note"></p>
+    </div>
+  </section>
+
+  <!-- 5. Unclear -->
+  <section aria-labelledby="h-unclear">
+    <h2 id="h-unclear"><span class="sec-num">05</span><span data-t="unclear.heading"></span></h2>
+    <p class="lead"><span class="tag verify" data-t="labels.verify"></span></p>
+    <ul class="qlist" id="unclearList"></ul>
+  </section>
+
+  <!-- 6. Method -->
+  <section aria-labelledby="h-method" class="prose">
+    <h2 id="h-method"><span class="sec-num">06</span><span data-t="method.heading"></span></h2>
+    <p data-t="method.body"></p>
+    <p><strong data-t="method.dashboardLabel"></strong>: <span id="dashLink"></span></p>
+  </section>
+
+  <!-- 7. About -->
+  <section aria-labelledby="h-about" class="prose">
+    <h2 id="h-about"><span class="sec-num">07</span><span data-t="about.heading"></span></h2>
+    <p data-t="about.bio"></p>
+    <p><strong>LinkedIn</strong>: <span id="liLink"></span></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap"><p data-t="footer.text"></p></div>
+</footer>
+
+<noscript><div class="wrap"><p>This page needs JavaScript to display its content.</p></div></noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* =====================================================================
+   EDIT TEXT HERE. Layout code below never needs to change for wording.
+   - ORIGINAL: Chinese source quotes. Shown identically in both languages.
+   - LINKS:    URLs (same for both languages).
+   - CONTENT:  every other string, in English (en) and Chinese (zh).
+   Anything written like [THIS] is shown as a highlighted placeholder.
+   In chart strings, {n} {x} {y} are filled in automatically.
+   ===================================================================== */
+
+const ORIGINAL = {
+  docTitle: "检验类医疗服务价格项目立项指南（试行）",
+  fact1: ["[PASTE ORIGINAL TEXT]"],
+  fact2: ["[PASTE ORIGINAL TEXT]"],
+  fact3: ['本项目计价单位所称的"项"指每种病原体。', "[PASTE ORIGINAL TIER RULE]"],
+  nmpaReg: "国械注进20223400387"
+};
+
+const LINKS = {
+  dashboard: "[DASHBOARD_URL]",
+  linkedin: "[LINKEDIN_URL]"
+};
+
+const CONTENT = {
+  en: {
+    ui: {
+      skip: "Skip to content",
+      langGroup: "Choose language",
+      kicker: "Policy brief · Diagnostics",
+      chartAria: "Line chart: billed units for 1 to 30 pathogens. The total drops from 7.0 at 10 pathogens to 6.6 at 11.",
+      chartImgAlt: "Chart of billed units by number of pathogens"
+    },
+    labels: {
+      fact: "Fact (from the text)",
+      inference: "Inference (my analysis)",
+      verify: "To verify"
+    },
+    header: {
+      title: "China's new lab-test pricing rules: what they mean for diagnostics",
+      subtitle: "A learning project based on public documents, by Jade (Qiongyi) Wu"
+    },
+    rules: {
+      heading: "The rules in 30 seconds",
+      lead: "Three rules from the national guideline that are relevant to diagnostics.",
+      docLabel: "Document: ",
+      docPublisher: ", National Healthcare Security Administration (NHSA), published August 2026.",
+      fieldPlain: "In plain English",
+      fieldOrig: "Original text",
+      fieldSource: "Source",
+      cards: [
+        { title: "Prices are ceilings",
+          body: "Provinces set the actual prices. They are maximum prices, and hospitals may charge less.",
+          orig: "fact1", source: "Usage notes, item 2" },
+        { title: "Reagent costs are included",
+          body: "The cost of reagents is part of the test price and cannot be charged separately.",
+          orig: "fact2", source: "Usage notes, item 6" },
+        { title: "Multiplex PCR is priced per pathogen",
+          body: "Item 175 (pathogen nucleic acid amplification testing) counts each pathogen as one billing unit. In combined testing, each item is billed at 80% when there are up to 5 pathogens, 70% up to 10, and 60% above 10.",
+          orig: "fact3", source: "Annex 1, item 175, pricing notes" }
+      ]
+    },
+    chart: {
+      heading: "The 11th-pathogen paradox",
+      lead: "Under the tiered rule, the total billed for a combined test does not always go up when you add a pathogen.",
+      label: "Inference (calculated from the rule)",
+      formula: "Billed units = number of pathogens × rate. Rate: 100% for a single test, 80% for 2–5, 70% for 6–10, 60% above 10.",
+      axisX: "Number of pathogens",
+      axisY: "Billed as how many single tests",
+      series: "Billed units",
+      noteDrop: "Adding the 11th pathogen lowers the total (10 → 7.0, 11 → 6.6).",
+      note14: "Example: a 14-pathogen meningitis/encephalitis panel registered in China (NMPA {reg}) would be billed as 8.4 single tests.",
+      sliderLabel: "Try a panel size",
+      liveOne: "{n} pathogen → billed as {x} single test (each at {y}%)",
+      liveMany: "{n} pathogens → billed as {x} single tests (each at {y}%)",
+      tooltip: "{n} pathogens: {x} single tests (each at {y}%)",
+      caption: "Based on the national text. Provinces may clarify the rule. Actual amounts depend on each province's unit price."
+    },
+    inferences: {
+      heading: "What it could mean",
+      lead: "My reading of the rules. These are inferences, not statements from the text.",
+      cards: [
+        { title: "Panel size matters",
+          body: "Under this rule, some panel sizes earn less than smaller ones." },
+        { title: "Different technologies, different pricing units",
+          body: "PCR is priced per pathogen, tNGS per panel, mNGS per test. Provincial prices could shift hospitals' choices between them." },
+        { title: "Pressure on reagent prices",
+          body: "With ceiling prices and reagent costs bundled in, there may be pressure on reagent prices." }
+      ]
+    },
+    workflow: {
+      heading: "Across the diagnostic workflow",
+      lead: "Where the relevant pricing items sit. Steps with a dashed outline still need checking.",
+      steps: [
+        { name: "Blood culture", status: "verify", items: ["Items 207, 209, 212"] },
+        { name: "Identification", status: "verify", items: ["Item 216"] },
+        { name: "Susceptibility testing", status: "verify", items: ["Item 217"] },
+        { name: "Molecular testing", status: "fact", items: [
+          "175 · PCR: per pathogen, tiered discount",
+          "176 · Resistance genes: per locus",
+          "190 · tNGS: per panel; 50 pathogens as the base unit, proportional increase for each additional 50; local caps",
+          "191 · mNGS: per test"
+        ] },
+        { name: "Immunoassay (PCT)", status: "verify", items: ["Item 322 · procalcitonin (PCT)"] }
+      ],
+      note: "Item 176 (resistance genes, molecular) is not the same as item 217 (susceptibility testing, phenotypic)."
+    },
+    unclear: {
+      heading: "What is still unclear",
+      items: [
+        "How each province will implement the guideline",
+        "Whether panels with resistance genes add item 176 per locus",
+        "Reimbursement categories",
+        "How the RNA add-on is applied",
+        "How provincial prices will affect the choice between PCR, tNGS and mNGS"
+      ]
+    },
+    method: {
+      heading: "How I did this",
+      body: "I read the national guideline and its annex, extracted the relevant items with Python, and separated facts, inferences and open questions. English translations are unofficial. Built with Python and AI assistance.",
+      dashboardLabel: "Full dashboard"
+    },
+    about: {
+      heading: "About me",
+      bio: "[ONE-LINE BIO]"
+    },
+    footer: {
+      text: "Based on public documents as of November 2026. Not affiliated with bioMérieux or any other company. English translations are unofficial. This is not legal or pricing advice."
+    }
+  },
+
+  zh: {
+    ui: {
+      skip: "跳到正文",
+      langGroup: "选择语言",
+      kicker: "政策简报 · 诊断",
+      chartAria: "折线图：1至30种病原体对应的计费单位。病原体从10种增加到11种时，总计费由7.0降至6.6。",
+      chartImgAlt: "按病原体数量计算的计费单位图"
+    },
+    labels: {
+      fact: "事实（出自原文）",
+      inference: "推断（我的分析）",
+      verify: "待核实"
+    },
+    header: {
+      title: "中国检验类医疗服务价格新规：对诊断行业意味着什么",
+      subtitle: "基于公开文件的学习项目，作者：Jade (Qiongyi) Wu"
+    },
+    rules: {
+      heading: "30秒看懂新规",
+      lead: "国家指南中与诊断行业相关的三条规则。",
+      docLabel: "文件：",
+      docPublisher: "，国家医疗保障局，2026年8月发布。",
+      fieldPlain: "通俗解读",
+      fieldOrig: "原文",
+      fieldSource: "出处",
+      cards: [
+        { title: "价格是上限",
+          body: "实际价格由各省确定。这些价格是最高限价，医院可以低于该价格收费。",
+          orig: "fact1", source: "使用说明第2条" },
+        { title: "试剂费用已包含在内",
+          body: "试剂成本计入检验项目价格，不得另行收费。",
+          orig: "fact2", source: "使用说明第6条" },
+        { title: "多重PCR按病原体计价",
+          body: "第175项（病原体核酸扩增检测）以每种病原体为一个计价单位。联合检测时，病原体不超过5种的，每项按80%计费；不超过10种的，按70%计费；超过10种的，按60%计费。",
+          orig: "fact3", source: "附件1第175项，计价说明" }
+      ]
+    },
+    chart: {
+      heading: "第11种病原体悖论",
+      lead: "在阶梯计价规则下，联合检测每多加一种病原体，总计费并不一定随之增加。",
+      label: "推断（依据规则测算）",
+      formula: "计费单位 = 病原体数量 × 计费比例。比例：单项检测100%，2–5种80%，6–10种70%，10种以上60%。",
+      axisX: "病原体数量",
+      axisY: "折合单项检测次数",
+      series: "计费单位",
+      noteDrop: "增加第11种病原体，总计费反而下降（10种 → 7.0，11种 → 6.6）。",
+      note14: "示例：一款在中国注册的14种病原体脑膜炎/脑炎检测组合（国家药品监督管理局 {reg}）将折合8.4次单项检测计费。",
+      sliderLabel: "试试不同的检测组合规模",
+      liveOne: "{n}种病原体 → 折合{x}次单项检测（每项按{y}%计费）",
+      liveMany: "{n}种病原体 → 折合{x}次单项检测（每项按{y}%计费）",
+      tooltip: "{n}种病原体：折合{x}次单项检测（每项按{y}%计费）",
+      caption: "依据国家文件原文测算。各省可能对该规则作出进一步说明。实际金额取决于各省的单价。"
+    },
+    inferences: {
+      heading: "可能的影响",
+      lead: "以下是我对规则的解读，属于推断，并非原文表述。",
+      cards: [
+        { title: "检测组合的规模很重要",
+          body: "按此规则，某些规模的检测组合计费反而低于规模更小的组合。" },
+        { title: "技术不同，计价单位不同",
+          body: "PCR按病原体计价，tNGS按检测组合（panel）计价，mNGS按次计价。各省定价可能改变医院在这几种技术之间的选择。" },
+        { title: "试剂价格可能承压",
+          body: "在最高限价且试剂成本已包含在内的情况下，试剂价格可能面临压力。" }
+      ]
+    },
+    workflow: {
+      heading: "贯穿诊断流程",
+      lead: "相关价格项目在诊断流程中的位置。虚线框中的环节仍需核实。",
+      steps: [
+        { name: "血培养", status: "verify", items: ["第207、209、212项"] },
+        { name: "鉴定", status: "verify", items: ["第216项"] },
+        { name: "药敏试验", status: "verify", items: ["第217项"] },
+        { name: "分子检测", status: "fact", items: [
+          "175 · PCR：按病原体计价，阶梯折扣",
+          "176 · 耐药基因：按位点计价",
+          "190 · tNGS：按检测组合计价，以50种病原体为基本单位，每增加50种按比例增加，各地设上限",
+          "191 · mNGS：按次计价"
+        ] },
+        { name: "免疫检测（PCT）", status: "verify", items: ["第322项 · 降钙素原（PCT）"] }
+      ],
+      note: "第176项（耐药基因，分子检测）与第217项（药敏试验，表型检测）不是同一个项目。"
+    },
+    unclear: {
+      heading: "尚不明确的问题",
+      items: [
+        "各省将如何落实该指南",
+        "含耐药基因的检测组合是否需按位点另计第176项",
+        "医保报销类别",
+        "RNA加收如何适用",
+        "各省定价将如何影响PCR、tNGS与mNGS之间的选择"
+      ]
+    },
+    method: {
+      heading: "研究方法",
+      body: "我阅读了国家指南及其附件，用Python提取了相关项目，并将事实、推断和待解决的问题分开呈现。英文翻译为非官方翻译。本项目借助Python和AI辅助完成。",
+      dashboardLabel: "完整数据看板"
+    },
+    about: {
+      heading: "关于我",
+      bio: "[ONE-LINE BIO]"
+    },
+    footer: {
+      text: "基于截至2026年11月的公开文件。与bioMérieux或任何其他公司均无关联。英文翻译为非官方翻译。本文不构成法律或定价建议。"
+    }
+  }
+};
+
+/* ======================= Layout code below ========================== */
+
+const PH_RE = /(\[[A-Z0-9_ -]+\])/;
+const isPlaceholder = s => /^\[[A-Z0-9_ -]+\]$/.test(s);
+
+// Write text into an element, wrapping [PLACEHOLDERS] in a visible <mark>.
+function setText(el, str) {
+  el.textContent = "";
+  String(str).split(PH_RE).forEach(part => {
+    if (!part) return;
+    if (isPlaceholder(part)) {
+      const m = document.createElement("mark");
+      m.className = "ph"; m.textContent = part;
+      el.appendChild(m);
+    } else {
+      el.appendChild(document.createTextNode(part));
+    }
+  });
+}
+const get = (obj, path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), obj);
+const fill = (tpl, vars) => tpl.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : `{${k}}`));
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) setText(e, text); return e; };
+
+function tag(kind, T) {
+  const t = el("span", "tag " + kind, T.labels[kind]);
+  return t;
+}
+
+function linkOrPlaceholder(container, url) {
+  container.textContent = "";
+  if (isPlaceholder(url)) { setText(container, url); return; }
+  const a = document.createElement("a");
+  a.href = url; a.textContent = url.replace(/^https?:\/\//, "");
+  a.rel = "noopener"; a.target = "_blank"; a.setAttribute("data-print-url", "");
+  container.appendChild(a);
+}
+
+// ---- Pricing rule (from Annex 1, item 175) ----
+const rate = n => (n === 1 ? 1.0 : n <= 5 ? 0.8 : n <= 10 ? 0.7 : 0.6);
+const billed = n => Math.round(n * rate(n) * 10) / 10;  // avoids 6.6000000000000005
+const N = Array.from({ length: 30 }, (_, i) => i + 1);
+
+let lang = "en", chart = null;
+
+function render() {
+  const T = CONTENT[lang];
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+  document.title = T.header.title;
+
+  document.querySelectorAll("[data-t]").forEach(e => setText(e, get(T, e.dataset.t) ?? ""));
+  document.querySelectorAll("[data-orig]").forEach(e => setText(e, ORIGINAL[e.dataset.orig]));
+  document.getElementById("langGroup").setAttribute("aria-label", T.ui.langGroup);
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+
+  // Fact cards
+  const fc = document.getElementById("factCards"); fc.textContent = "";
+  T.rules.cards.forEach(c => {
+    const card = el("article", "card");
+    card.appendChild(tag("fact", T));
+    card.appendChild(el("h3", null, c.title));
+    card.appendChild(el("div", "field", T.rules.fieldPlain));
+    card.appendChild(el("p", null, c.body));
+    card.appendChild(el("div", "field", T.rules.fieldOrig));
+    const q = el("blockquote", "orig"); q.lang = "zh-CN";
+    ORIGINAL[c.orig].forEach(line => q.appendChild(el("p", null, line)));
+    card.appendChild(q);
+    card.appendChild(el("div", "field", T.rules.fieldSource));
+    card.appendChild(el("p", "src", c.source));
+    fc.appendChild(card);
+  });
+
+  // Inference cards
+  const ic = document.getElementById("infCards"); ic.textContent = "";
+  T.inferences.cards.forEach(c => {
+    const card = el("article", "card");
+    card.appendChild(tag("inference", T));
+    card.appendChild(el("h3", null, c.title));
+    card.appendChild(el("p", null, c.body));
+    ic.appendChild(card);
+  });
+
+  // Workflow
+  const fl = document.getElementById("flow"); fl.textContent = "";
+  T.workflow.steps.forEach((s, i) => {
+    if (i > 0) { const a = el("li", "arrow"); a.setAttribute("aria-hidden", "true"); fl.appendChild(a); }
+    const li = el("li", "step is-" + s.status);
+    li.appendChild(el("h3", null, s.name));
+    li.appendChild(tag(s.status, T));
+    const ul = el("ul");
+    s.items.forEach(it => {
+      const item = el("li");
+      const m = it.match(/^(\d+)( · .*)$/);
+      if (m) { item.appendChild(el("span", "num", m[1])); item.appendChild(document.createTextNode(m[2])); }
+      else setText(item, it);
+      ul.appendChild(item);
+    });
+    li.appendChild(ul);
+    fl.appendChild(li);
+  });
+
+  // Unclear
+  const ul = document.getElementById("unclearList"); ul.textContent = "";
+  T.unclear.items.forEach(t => {
+    const li = el("li");
+    const q = el("span", "q", "?"); q.setAttribute("aria-hidden", "true");
+    li.appendChild(q); li.appendChild(el("span", null, t));
+    ul.appendChild(li);
+  });
+
+  // Chart note with registration number
+  setText(document.querySelector('[data-t="chart.note14"]'), fill(T.chart.note14, { reg: ORIGINAL.nmpaReg }));
+
+  linkOrPlaceholder(document.getElementById("dashLink"), LINKS.dashboard);
+  linkOrPlaceholder(document.getElementById("liLink"), LINKS.linkedin);
+
+  document.getElementById("chart").setAttribute("aria-label", T.ui.chartAria);
+  document.getElementById("chartImg").alt = T.ui.chartImgAlt;
+  document.getElementById("nSlider").setAttribute("aria-label", T.chart.sliderLabel);
+
+  updateLive();
+  drawChart();
+}
+
+function updateLive() {
+  const T = CONTENT[lang];
+  const n = +document.getElementById("nSlider").value;
+  const x = billed(n).toFixed(1), y = Math.round(rate(n) * 100);
+  const out = document.getElementById("liveText");
+  out.textContent = fill(n === 1 ? T.chart.liveOne : T.chart.liveMany, { n, x, y });
+  out.classList.toggle("down", n > 1 && billed(n) < billed(n - 1));
+  if (chart) { chart.$selected = n; chart.update("none"); }
+}
+
+// Small inline plugin: draws the 10→11 drop and the n=14 example on the canvas.
+const markers = {
+  id: "markers",
+  afterDatasetsDraw(c) {
+    const css = getComputedStyle(document.documentElement);
+    const accent = css.getPropertyValue("--accent").trim();
+    const inf = css.getPropertyValue("--inf").trim();
+    const meta = c.getDatasetMeta(0), ctx = c.ctx;
+    const p10 = meta.data[9], p11 = meta.data[10], p14 = meta.data[13];
+    ctx.save();
+    // shaded band around the 10 → 11 drop
+    ctx.fillStyle = "rgba(138,90,0,.10)";
+    const bx = p10.x - 6, bw = (p11.x - p10.x) + 12;
+    ctx.fillRect(bx, c.chartArea.top, bw, c.chartArea.bottom - c.chartArea.top);
+    // drop segment
+    ctx.strokeStyle = inf; ctx.lineWidth = 4; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(p10.x, p10.y); ctx.lineTo(p11.x, p11.y); ctx.stroke();
+    [p10, p11].forEach(p => { ctx.fillStyle = inf; ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI * 2); ctx.fill(); });
+    ctx.font = "600 12px " + css.getPropertyValue("--sans");
+    ctx.fillStyle = inf; ctx.textAlign = "left";
+    ctx.fillText("10 → 11: 7.0 → 6.6", bx + bw + 6, c.chartArea.top + 12);
+    // n = 14 example
+    ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.fillStyle = "#fff";
+    ctx.beginPath(); ctx.arc(p14.x, p14.y, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = accent; ctx.textAlign = "left";
+    ctx.fillText("n = 14 → 8.4", p14.x + 4, p14.y + 22);
+    // slider position
+    const n = c.$selected;
+    if (n) {
+      const p = meta.data[n - 1];
+      ctx.strokeStyle = "rgba(28,33,38,.25)"; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(p.x, c.chartArea.top); ctx.lineTo(p.x, c.chartArea.bottom); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = "#1c2126";
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+};
+
+function drawChart() {
+  if (typeof Chart === "undefined") return;  // CDN unavailable: page still readable
+  const T = CONTENT[lang];
+  const css = getComputedStyle(document.documentElement);
+  const accent = css.getPropertyValue("--accent").trim();
+  const ink2 = css.getPropertyValue("--ink-2").trim();
+  const line = css.getPropertyValue("--line").trim();
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: { labels: N, datasets: [{
+      label: T.chart.series, data: N.map(billed),
+      borderColor: accent, backgroundColor: accent, borderWidth: 2,
+      pointRadius: 2.5, pointHoverRadius: 6, tension: 0
+    }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 18, right: 8 } },
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: { displayColors: false, callbacks: {
+          title: () => "",
+          label: i => fill(T.chart.tooltip, { n: i.parsed.x + 1, x: billed(i.parsed.x + 1).toFixed(1), y: Math.round(rate(i.parsed.x + 1) * 100) })
+        } }
+      },
+      scales: {
+        x: { title: { display: true, text: T.chart.axisX, color: ink2 }, grid: { display: false },
+             ticks: { color: ink2, autoSkip: false, maxRotation: 0, callback: (v, i) => ([0, 4, 9, 14, 19, 24, 29].includes(i) ? N[i] : "") } },
+        y: { beginAtZero: true, title: { display: true, text: T.chart.axisY, color: ink2 },
+             grid: { color: line }, ticks: { color: ink2, stepSize: 2 } }
+      }
+    },
+    plugins: [markers]
+  });
+  chart.$selected = +document.getElementById("nSlider").value;
+  chart.update("none");
+}
+
+// Print: swap the canvas for a static image so it prints crisply.
+window.addEventListener("beforeprint", () => {
+  if (!chart) return;
+  const img = document.getElementById("chartImg");
+  img.src = chart.toBase64Image("image/png", 1);
+});
+
+// ---- Language: ?lang= in URL > saved choice > English ----
+function initialLang() {
+  const q = new URLSearchParams(location.search).get("lang");
+  if (q && CONTENT[q]) return q;
+  try { const s = localStorage.getItem("lang"); if (s && CONTENT[s]) return s; } catch (e) {}
+  return "en";
+}
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("lang", l); } catch (e) {}
+  try {
+    const u = new URL(location.href);
+    if (l === "en") u.searchParams.delete("lang"); else u.searchParams.set("lang", l);
+    history.replaceState(null, "", u);
+  } catch (e) {}
+  render();
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+document.getElementById("nSlider").addEventListener("input", updateLive);
+
+lang = initialLang();
+render();
+</script>
+</body>
+</html>
