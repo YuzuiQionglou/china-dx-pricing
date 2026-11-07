@@ -22,6 +22,32 @@ Tips:
 - In chart strings, `{n}`, `{x}`, `{y}` and `{reg}` are filled in automatically. Keep them.
 - If you add a line to a list (for example `unclear.items`), add it in both `en` and `zh`.
 - The chart is calculated from the rule in the `rate` function, not typed in by hand.
+- The overview tiles are in `CONTENT.<lang>.home.tiles`, one per section, in order:
+  `short` (name on the section tabs and the previous/next buttons), `teaser`, optional `stat`
+  (big text) and `tags` (`"fact"`, `"inference"`, `"verify"`).
+- `CONTENT.<lang>.nav` holds the navigation words ("Overview", "Previous", "Next"…).
+
+## How the page works
+
+The page opens on an **overview**: seven tiles, one per section. Tapping a tile opens that section
+on its own. Inside a section you can go back to the overview, jump between sections with the tabs
+at the top, use the previous/next buttons at the bottom, swipe left/right on a phone, or use the
+← → arrow keys (Esc goes back to the overview).
+
+Each section has its own link, handy for sending one part to a colleague:
+
+| Section | Link ending |
+|---|---|
+| Overview | (none) |
+| 01 The rules in 30 seconds | `#rules` |
+| 02 The 11th-pathogen paradox | `#chart` |
+| 03 What it could mean | `#impact` |
+| 04 Across the diagnostic workflow | `#workflow` |
+| 05 What is still unclear | `#unclear` |
+| 06 How I did this | `#method` |
+| 07 About me | `#about` |
+
+Combine with the language: `…/china-dx-pricing/?lang=zh#chart`.
 
 To preview locally, just double-click `index.html`, or run:
 
@@ -66,5 +92,6 @@ uv run scripts/make_qr.py https://<your-username>.github.io/china-dx-pricing/
 
 ## Print
 
-Printing the page (Cmd/Ctrl + P) gives a clean 1–2 page brief: the language toggle and slider
-are hidden, the chart is kept.
+Printing the page (Cmd/Ctrl + P) from any view gives a clean brief with all seven sections one
+after the other: the overview tiles, navigation, language toggle and slider are hidden, the chart
+is kept.

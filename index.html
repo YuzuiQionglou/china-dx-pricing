@@ -31,31 +31,97 @@
     margin: 0; background: var(--bg); color: var(--ink);
     font-family: var(--sans); font-size: 17px; line-height: 1.6;
   }
+  [hidden] { display: none !important; }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
   a { color: var(--accent); text-underline-offset: 2px; }
   a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   .skip { position: absolute; left: -9999px; }
-  .skip:focus { left: 16px; top: 8px; background: var(--surface); padding: 8px 12px; z-index: 10; }
+  .skip:focus { left: 16px; top: 8px; background: var(--surface); padding: 8px 12px; z-index: 30; }
 
-  /* Header */
-  header.site { background: var(--surface); border-bottom: 1px solid var(--line); }
-  .topbar { display: flex; justify-content: flex-end; padding-top: 12px; }
-  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  /* ---------- Header ---------- */
+  header.site { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+  body.mode-home header.site { position: static; }
+  .topbar { display: flex; align-items: center; gap: 10px; min-height: 56px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-size: 15px; font-weight: 600; color: var(--accent); padding: 8px 10px 8px 0; min-height: 44px;
+  }
+  @media (max-width: 479px) { .topbar .mini-title { visibility: hidden; } }
+  .topbar .mini-title { flex: 1; min-width: 0; font-size: 13px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-left: auto; flex: none; }
   .lang button {
     font: inherit; font-size: 14px; border: 0; background: transparent; color: var(--ink-2);
     padding: 6px 14px; cursor: pointer; min-height: 36px;
   }
   .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
-  .hero { padding: 28px 0 36px; }
+
+  /* Section tabs (shown inside a section) */
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 0 0 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs a {
+    flex: none; text-decoration: none; font-size: 13.5px; color: var(--ink-2);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; background: var(--surface); white-space: nowrap;
+  }
+  .tabs a .n { font-weight: 700; margin-right: 4px; font-variant-numeric: tabular-nums; }
+  .tabs a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .hero { padding: 8px 0 28px; }
   .kicker { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px; }
   h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 6.4vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -.01em; }
   .subtitle { color: var(--ink-2); margin: 0; font-size: 17px; }
 
-  main section { padding: 40px 0 8px; }
-  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(23px, 4.6vw, 30px); line-height: 1.2; margin: 0 0 8px; }
+  /* ---------- Overview tiles ---------- */
+  .home { padding: 24px 0 8px; }
+  .home-intro { color: var(--ink-2); margin: 0 0 14px; font-size: 15px; }
+  .tiles { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 720px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; } }
+  .tile {
+    position: relative; display: flex; flex-direction: column; gap: 6px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 14px 12px; text-decoration: none; color: var(--ink); min-height: 150px;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+  }
+  .tile:hover { border-color: var(--accent); box-shadow: 0 2px 10px rgba(31,78,121,.08); }
+  .tile:active { transform: scale(.985); }
+  .tile .t-num { font-size: 12.5px; font-weight: 700; color: var(--accent); letter-spacing: .06em; }
+  .tile .t-title { font-family: var(--serif); font-weight: 600; font-size: 17.5px; line-height: 1.25; }
+  .tile .t-teaser { font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
+  .tile .t-stat { font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1; color: var(--inf); font-variant-numeric: tabular-nums; }
+  .tile .t-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: 6px; }
+  .tile .t-go { position: absolute; top: 12px; right: 14px; color: var(--ink-2); font-size: 16px; }
+  .tile.featured { grid-column: 1 / -1; min-height: 0; }
+  .tile.featured .t-body { display: grid; gap: 4px 16px; grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .tile.featured .t-body { grid-template-columns: 1fr 1.2fr; align-items: center; } }
+  .spark { width: 100%; height: 86px; display: block; }
+  .tile .tag { font-size: 11px; padding: 4px 7px; white-space: normal; line-height: 1.25; max-width: 100%; }
+  /* Keep tiles in reading order: 01 / 02 / 03·04 / 05·06 / 07 on phones,
+     01·02(wide) / 03·04·05 / 06·07(wide) on larger screens */
+  .tile.wide-m { grid-column: 1 / -1; min-height: 0; }
+  @media (min-width: 720px) {
+    .tile.wide-m { grid-column: auto; min-height: 150px; }
+    .tile.featured { grid-column: span 2; }
+    .tile.wide-d { grid-column: span 2; }
+  }
+
+  /* ---------- Section views ---------- */
+  main .panel { padding: 22px 0 8px; }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(25px, 5.4vw, 32px); line-height: 1.2; margin: 0 0 8px; outline: none; }
   .sec-num { display: block; font-family: var(--sans); font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: .06em; margin-bottom: 4px; }
   .lead { color: var(--ink-2); margin: 0 0 20px; }
   h3 { font-size: 18px; line-height: 1.3; margin: 10px 0 8px; }
+
+  /* Pager */
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 28px 0 0; }
+  .pager a {
+    display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; min-height: 60px;
+  }
+  .pager a:hover { border-color: var(--accent); }
+  .pager .dir { font-size: 12.5px; color: var(--accent); font-weight: 600; }
+  .pager .nm { font-size: 14.5px; font-weight: 600; line-height: 1.3; }
+  .pager .next { text-align: right; grid-column: 2; }
+  .swipe-hint { text-align: center; font-size: 12.5px; color: var(--ink-2); margin: 10px 0 0; }
+  @media (hover: hover) { .swipe-hint { display: none; } }
 
   /* Labels */
   .tag {
@@ -130,19 +196,21 @@
   .qlist li .q { font-weight: 700; color: var(--ver); }
 
   .prose p { margin: 0 0 10px; }
-  footer.site { margin-top: 48px; border-top: 1px solid var(--line); background: var(--surface); }
-  footer.site p { font-size: 14px; color: var(--ink-2); margin: 0; padding: 22px 0 32px; }
+  footer.site { margin-top: 40px; border-top: 1px solid var(--line); background: var(--surface); }
+  footer.site p { font-size: 13.5px; color: var(--ink-2); margin: 0; padding: 20px 0 32px; }
 
-  /* Print: a clean 1–2 page brief */
+  /* Print: every section, one after the other — a clean 1–2 page brief */
   @media print {
     @page { margin: 14mm; }
     body { background: #fff; font-size: 10.5pt; line-height: 1.4; }
-    .no-print, .skip { display: none !important; }
-    header.site, footer.site { background: #fff; border: 0; }
+    .no-print, .skip, .home, .pager, .swipe-hint, .tabs, .topbar { display: none !important; }
+    .panel[hidden], .hero[hidden] { display: block !important; }
+    header.site { position: static; background: #fff; border: 0; }
+    footer.site { background: #fff; border: 0; margin-top: 10pt; }
     .hero { padding: 0 0 8pt; }
     h1 { font-size: 20pt; }
     h2 { font-size: 13.5pt; }
-    main section { padding: 10pt 0 0; }
+    main .panel { padding: 10pt 0 0; }
     .lead { margin-bottom: 6pt; }
     .card, .chart-box, .step, .doc, .flow-note, .qlist li { box-shadow: none; padding: 7pt 9pt; break-inside: avoid; }
     .grid.three { grid-template-columns: repeat(3, 1fr); gap: 7pt; }
@@ -150,27 +218,31 @@
     .arrow { display: flex; align-items: center; padding: 0 2pt; }
     .arrow::before { content: "→"; }
     .canvas-wrap { height: auto; }
-    #chart { display: none !important; }
+    #chartCanvas { display: none !important; }
     #chartImg { display: block; max-height: 62mm; width: auto; margin: 0 auto; }
-    .chart-box { break-inside: avoid; }
     .tag { font-size: 8pt; padding: 2pt 5pt; }
     a[data-print-url]::after { content: " (" attr(href) ")"; font-size: 8.5pt; color: var(--ink-2); }
     .orig { font-size: 10pt; }
   }
+  /* While preparing to print, lay out every panel so the chart can be measured */
+  body.printing .panel[hidden] { display: block !important; }
 </style>
 </head>
-<body>
+<body class="mode-home">
 <a class="skip" href="#main" data-t="ui.skip">Skip to content</a>
 
 <header class="site">
   <div class="wrap">
-    <div class="topbar no-print">
-      <div class="lang" role="group" id="langGroup" aria-label="Choose language">
+    <div class="topbar">
+      <a class="back no-print" id="backLink" href="#" hidden><span aria-hidden="true">←</span><span data-t="nav.overview"></span></a>
+      <span class="mini-title" id="miniTitle" hidden data-t="nav.siteShort"></span>
+      <div class="lang no-print" role="group" id="langGroup" aria-label="Choose language">
         <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
         <button type="button" data-lang="zh" aria-pressed="false" lang="zh">中文</button>
       </div>
     </div>
-    <div class="hero">
+    <nav class="tabs no-print" id="tabs" hidden aria-label="Sections"></nav>
+    <div class="hero" id="hero">
       <p class="kicker" data-t="ui.kicker"></p>
       <h1 data-t="header.title"></h1>
       <p class="subtitle" data-t="header.subtitle"></p>
@@ -180,9 +252,15 @@
 
 <main id="main" class="wrap">
 
-  <!-- 1. The rules in 30 seconds -->
-  <section aria-labelledby="h-rules">
-    <h2 id="h-rules"><span class="sec-num">01</span><span data-t="rules.heading"></span></h2>
+  <!-- Overview (dashboard) -->
+  <section class="home" id="home" aria-label="Overview">
+    <p class="home-intro" data-t="home.intro"></p>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <!-- 01. The rules in 30 seconds -->
+  <section class="panel" id="p-rules" data-panel hidden aria-labelledby="h-rules">
+    <h2 id="h-rules" tabindex="-1"><span class="sec-num">01</span><span data-t="rules.heading"></span></h2>
     <p class="lead" data-t="rules.lead"></p>
     <div class="doc">
       <span data-t="rules.docLabel"></span><span class="zh-doc" lang="zh" data-orig="docTitle"></span><span data-t="rules.docPublisher"></span>
@@ -190,9 +268,9 @@
     <div class="grid three" id="factCards"></div>
   </section>
 
-  <!-- 2. Chart -->
-  <section aria-labelledby="h-chart">
-    <h2 id="h-chart"><span class="sec-num">02</span><span data-t="chart.heading"></span></h2>
+  <!-- 02. Chart -->
+  <section class="panel" id="p-chart" data-panel hidden aria-labelledby="h-chart">
+    <h2 id="h-chart" tabindex="-1"><span class="sec-num">02</span><span data-t="chart.heading"></span></h2>
     <p class="lead" data-t="chart.lead"></p>
     <div class="chart-box">
       <div class="chart-head">
@@ -200,7 +278,7 @@
         <p class="formula" data-t="chart.formula"></p>
       </div>
       <div class="canvas-wrap">
-        <canvas id="chart" role="img" aria-label=""></canvas>
+        <canvas id="chartCanvas" role="img" aria-label=""></canvas>
         <img id="chartImg" alt="">
       </div>
       <ul class="notes">
@@ -216,16 +294,16 @@
     </div>
   </section>
 
-  <!-- 3. Inferences -->
-  <section aria-labelledby="h-inf">
-    <h2 id="h-inf"><span class="sec-num">03</span><span data-t="inferences.heading"></span></h2>
+  <!-- 03. Inferences -->
+  <section class="panel" id="p-impact" data-panel hidden aria-labelledby="h-inf">
+    <h2 id="h-inf" tabindex="-1"><span class="sec-num">03</span><span data-t="inferences.heading"></span></h2>
     <p class="lead" data-t="inferences.lead"></p>
     <div class="grid three" id="infCards"></div>
   </section>
 
-  <!-- 4. Workflow -->
-  <section aria-labelledby="h-flow">
-    <h2 id="h-flow"><span class="sec-num">04</span><span data-t="workflow.heading"></span></h2>
+  <!-- 04. Workflow -->
+  <section class="panel" id="p-workflow" data-panel hidden aria-labelledby="h-flow">
+    <h2 id="h-flow" tabindex="-1"><span class="sec-num">04</span><span data-t="workflow.heading"></span></h2>
     <p class="lead" data-t="workflow.lead"></p>
     <ol class="flow" id="flow"></ol>
     <div class="flow-note">
@@ -234,26 +312,29 @@
     </div>
   </section>
 
-  <!-- 5. Unclear -->
-  <section aria-labelledby="h-unclear">
-    <h2 id="h-unclear"><span class="sec-num">05</span><span data-t="unclear.heading"></span></h2>
+  <!-- 05. Unclear -->
+  <section class="panel" id="p-unclear" data-panel hidden aria-labelledby="h-unclear">
+    <h2 id="h-unclear" tabindex="-1"><span class="sec-num">05</span><span data-t="unclear.heading"></span></h2>
     <p class="lead"><span class="tag verify" data-t="labels.verify"></span></p>
     <ul class="qlist" id="unclearList"></ul>
   </section>
 
-  <!-- 6. Method -->
-  <section aria-labelledby="h-method" class="prose">
-    <h2 id="h-method"><span class="sec-num">06</span><span data-t="method.heading"></span></h2>
+  <!-- 06. Method -->
+  <section class="panel prose" id="p-method" data-panel hidden aria-labelledby="h-method">
+    <h2 id="h-method" tabindex="-1"><span class="sec-num">06</span><span data-t="method.heading"></span></h2>
     <p data-t="method.body"></p>
     <p><strong data-t="method.dashboardLabel"></strong>: <span id="dashLink"></span></p>
   </section>
 
-  <!-- 7. About -->
-  <section aria-labelledby="h-about" class="prose">
-    <h2 id="h-about"><span class="sec-num">07</span><span data-t="about.heading"></span></h2>
+  <!-- 07. About -->
+  <section class="panel prose" id="p-about" data-panel hidden aria-labelledby="h-about">
+    <h2 id="h-about" tabindex="-1"><span class="sec-num">07</span><span data-t="about.heading"></span></h2>
     <p data-t="about.bio"></p>
     <p><strong>LinkedIn</strong>: <span id="liLink"></span></p>
   </section>
+
+  <nav class="pager no-print" id="pager" hidden aria-label="Previous and next section"></nav>
+  <p class="swipe-hint no-print" id="swipeHint" hidden data-t="nav.swipeHint"></p>
 </main>
 
 <footer class="site">
@@ -270,7 +351,7 @@
    - LINKS:    URLs (same for both languages).
    - CONTENT:  every other string, in English (en) and Chinese (zh).
    Anything written like [THIS] is shown as a highlighted placeholder.
-   In chart strings, {n} {x} {y} are filled in automatically.
+   In chart strings, {n} {x} {y} {reg} are filled in automatically.
    ===================================================================== */
 
 const ORIGINAL = {
@@ -294,6 +375,27 @@ const CONTENT = {
       kicker: "Policy brief · Diagnostics",
       chartAria: "Line chart: billed units for 1 to 30 pathogens. The total drops from 7.0 at 10 pathogens to 6.6 at 11.",
       chartImgAlt: "Chart of billed units by number of pathogens"
+    },
+    nav: {
+      overview: "Overview",
+      siteShort: "China lab-test pricing rules",
+      previous: "Previous",
+      next: "Next",
+      swipeHint: "Swipe left or right to change section",
+      sectionsAria: "Sections"
+    },
+    home: {
+      intro: "Seven short sections. Tap one to open it.",
+      // One tile per section, in order. "stat" is optional (big text on the tile).
+      tiles: [
+        { short: "Rules", teaser: "Ceiling prices · reagents included · PCR priced per pathogen", tags: ["fact"] },
+        { short: "Paradox", stat: "7.0 → 6.6", teaser: "What happens to the total when you add the 11th pathogen", tags: ["inference"] },
+        { short: "Impact", teaser: "Panel size, pricing units, reagent prices", tags: ["inference"] },
+        { short: "Workflow", teaser: "Blood culture → Identification → Susceptibility → Molecular → PCT", tags: ["fact", "verify"] },
+        { short: "Open questions", stat: "5", teaser: "Open questions", tags: ["verify"] },
+        { short: "Method", teaser: "How I read the text, and the full dashboard", tags: [] },
+        { short: "About", teaser: "Who made this", tags: [] }
+      ]
     },
     labels: {
       fact: "Fact (from the text)",
@@ -401,6 +503,26 @@ const CONTENT = {
       chartAria: "折线图：1至30种病原体对应的计费单位。病原体从10种增加到11种时，总计费由7.0降至6.6。",
       chartImgAlt: "按病原体数量计算的计费单位图"
     },
+    nav: {
+      overview: "总览",
+      siteShort: "中国检验类价格新规",
+      previous: "上一部分",
+      next: "下一部分",
+      swipeHint: "左右滑动切换板块",
+      sectionsAria: "板块"
+    },
+    home: {
+      intro: "共七个板块，点击任一板块查看。",
+      tiles: [
+        { short: "规则", teaser: "最高限价 · 试剂费用包含在内 · PCR按病原体计价", tags: ["fact"] },
+        { short: "悖论", stat: "7.0 → 6.6", teaser: "增加第11种病原体后，总计费如何变化", tags: ["inference"] },
+        { short: "影响", teaser: "检测组合规模 · 计价单位 · 试剂价格", tags: ["inference"] },
+        { short: "流程", teaser: "血培养 → 鉴定 → 药敏 → 分子 → PCT", tags: ["fact", "verify"] },
+        { short: "待解问题", stat: "5", teaser: "个尚待解答的问题", tags: ["verify"] },
+        { short: "方法", teaser: "我如何阅读原文，以及完整数据看板", tags: [] },
+        { short: "关于", teaser: "关于作者", tags: [] }
+      ]
+    },
     labels: {
       fact: "事实（出自原文）",
       inference: "推断（我的分析）",
@@ -502,6 +624,17 @@ const CONTENT = {
 
 /* ======================= Layout code below ========================== */
 
+// Section order. The id is the link (#rules, #chart …); heading is read from CONTENT.
+const SECTIONS = [
+  { id: "rules",    panel: "p-rules",        heading: "rules.heading" },
+  { id: "chart",    panel: "p-chart", heading: "chart.heading" },
+  { id: "impact",   panel: "p-impact",       heading: "inferences.heading" },
+  { id: "workflow", panel: "p-workflow",     heading: "workflow.heading" },
+  { id: "unclear",  panel: "p-unclear",      heading: "unclear.heading" },
+  { id: "method",   panel: "p-method",       heading: "method.heading" },
+  { id: "about",    panel: "p-about",        heading: "about.heading" }
+];
+
 const PH_RE = /(\[[A-Z0-9_ -]+\])/;
 const isPlaceholder = s => /^\[[A-Z0-9_ -]+\]$/.test(s);
 
@@ -522,11 +655,8 @@ function setText(el, str) {
 const get = (obj, path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), obj);
 const fill = (tpl, vars) => tpl.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : `{${k}}`));
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) setText(e, text); return e; };
-
-function tag(kind, T) {
-  const t = el("span", "tag " + kind, T.labels[kind]);
-  return t;
-}
+const pad = i => String(i + 1).padStart(2, "0");
+const tag = (kind, T) => el("span", "tag " + kind, T.labels[kind]);
 
 function linkOrPlaceholder(container, url) {
   container.textContent = "";
@@ -542,17 +672,63 @@ const rate = n => (n === 1 ? 1.0 : n <= 5 ? 0.8 : n <= 10 ? 0.7 : 0.6);
 const billed = n => Math.round(n * rate(n) * 10) / 10;  // avoids 6.6000000000000005
 const N = Array.from({ length: 30 }, (_, i) => i + 1);
 
-let lang = "en", chart = null;
+let lang = "en", chart = null, current = null;   // current: section index, or null = overview
+
+// Small inline sparkline for the chart tile (computed from the same rule).
+function sparkline() {
+  const W = 300, H = 86, P = 6, max = billed(30);
+  const x = n => P + (n - 1) / 29 * (W - 2 * P);
+  const y = v => H - P - v / max * (H - 2 * P);
+  const pts = N.map(n => `${x(n).toFixed(1)},${y(billed(n)).toFixed(1)}`).join(" ");
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("class", "spark"); svg.setAttribute("aria-hidden", "true");
+  svg.innerHTML =
+    `<rect x="${x(10) - 5}" y="0" width="${x(11) - x(10) + 10}" height="${H}" fill="rgba(138,90,0,.12)"/>` +
+    `<polyline points="${pts}" fill="none" stroke="#1f4e79" stroke-width="2"/>` +
+    `<line x1="${x(10)}" y1="${y(7)}" x2="${x(11)}" y2="${y(6.6)}" stroke="#8a5a00" stroke-width="4" stroke-linecap="round"/>` +
+    `<circle cx="${x(10)}" cy="${y(7)}" r="4" fill="#8a5a00"/><circle cx="${x(11)}" cy="${y(6.6)}" r="4" fill="#8a5a00"/>`;
+  return svg;
+}
 
 function render() {
   const T = CONTENT[lang];
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-  document.title = T.header.title;
 
   document.querySelectorAll("[data-t]").forEach(e => setText(e, get(T, e.dataset.t) ?? ""));
   document.querySelectorAll("[data-orig]").forEach(e => setText(e, ORIGINAL[e.dataset.orig]));
   document.getElementById("langGroup").setAttribute("aria-label", T.ui.langGroup);
+  document.getElementById("tabs").setAttribute("aria-label", T.nav.sectionsAria);
   document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+
+  // Overview tiles
+  const tiles = document.getElementById("tiles"); tiles.textContent = "";
+  SECTIONS.forEach((s, i) => {
+    const d = T.home.tiles[i];
+    const layout = { chart: " featured", rules: " wide-m", about: " wide-m wide-d" }[s.id] || "";
+    const a = el("a", "tile" + layout);
+    a.href = "#" + s.id;
+    const go = el("span", "t-go", "→"); go.setAttribute("aria-hidden", "true"); a.appendChild(go);
+    a.appendChild(el("span", "t-num", pad(i)));
+    a.appendChild(el("span", "t-title", get(T, s.heading)));
+    const body = el("div", "t-body");
+    const txt = el("div");
+    if (d.stat) txt.appendChild(el("div", "t-stat", d.stat));
+    txt.appendChild(el("div", "t-teaser", d.teaser));
+    body.appendChild(txt);
+    if (s.id === "chart") body.appendChild(sparkline());
+    a.appendChild(body);
+    if (d.tags.length) { const tg = el("div", "t-tags"); d.tags.forEach(k => tg.appendChild(tag(k, T))); a.appendChild(tg); }
+    tiles.appendChild(a);
+  });
+
+  // Section tabs
+  const tabs = document.getElementById("tabs"); tabs.textContent = "";
+  SECTIONS.forEach((s, i) => {
+    const a = el("a"); a.href = "#" + s.id; a.dataset.idx = i;
+    a.appendChild(el("span", "n", pad(i))); a.appendChild(document.createTextNode(T.home.tiles[i].short));
+    tabs.appendChild(a);
+  });
 
   // Fact cards
   const fc = document.getElementById("factCards"); fc.textContent = "";
@@ -609,20 +785,98 @@ function render() {
     ul.appendChild(li);
   });
 
-  // Chart note with registration number
   setText(document.querySelector('[data-t="chart.note14"]'), fill(T.chart.note14, { reg: ORIGINAL.nmpaReg }));
-
   linkOrPlaceholder(document.getElementById("dashLink"), LINKS.dashboard);
   linkOrPlaceholder(document.getElementById("liLink"), LINKS.linkedin);
 
-  document.getElementById("chart").setAttribute("aria-label", T.ui.chartAria);
+  document.getElementById("chartCanvas").setAttribute("aria-label", T.ui.chartAria);
   document.getElementById("chartImg").alt = T.ui.chartImgAlt;
   document.getElementById("nSlider").setAttribute("aria-label", T.chart.sliderLabel);
 
   updateLive();
-  drawChart();
+  showView(false);
 }
 
+// ---- Views: overview ↔ one section at a time (driven by the URL hash) ----
+function indexFromHash() {
+  const id = decodeURIComponent(location.hash.replace(/^#/, ""));
+  const i = SECTIONS.findIndex(s => s.id === id);
+  return i < 0 ? null : i;
+}
+
+function showView(moveFocus) {
+  const T = CONTENT[lang];
+  current = indexFromHash();
+  const home = current === null;
+  document.body.classList.toggle("mode-home", home);
+  document.body.classList.toggle("mode-section", !home);
+  document.getElementById("home").hidden = !home;
+  document.getElementById("hero").hidden = !home;
+  document.getElementById("backLink").hidden = home;
+  document.getElementById("miniTitle").hidden = !home ? false : true;
+  document.getElementById("tabs").hidden = home;
+  document.getElementById("pager").hidden = home;
+  document.getElementById("swipeHint").hidden = home;
+  SECTIONS.forEach((s, i) => { document.getElementById(s.panel).hidden = i !== current; });
+
+  document.title = home ? T.header.title : `${get(T, SECTIONS[current].heading)} · ${T.nav.siteShort}`;
+
+  if (!home) {
+    // tabs
+    document.querySelectorAll("#tabs a").forEach(a => {
+      const on = +a.dataset.idx === current;
+      if (on) { a.setAttribute("aria-current", "page"); } else { a.removeAttribute("aria-current"); }
+    });
+    const activeTab = document.querySelector('#tabs a[aria-current="page"]');
+    if (activeTab) activeTab.scrollIntoView({ block: "nearest", inline: "center" });
+    // pager
+    const pager = document.getElementById("pager"); pager.textContent = "";
+    const mk = (i, cls, dir) => {
+      const a = el("a", cls); a.href = "#" + SECTIONS[i].id;
+      a.appendChild(el("span", "dir", dir)); a.appendChild(el("span", "nm", pad(i) + " · " + T.home.tiles[i].short));
+      pager.appendChild(a);
+    };
+    if (current > 0) mk(current - 1, "prev", "← " + T.nav.previous);
+    if (current < SECTIONS.length - 1) mk(current + 1, "next", T.nav.next + " →");
+    // chart needs to be (re)built once its panel is visible
+    if (SECTIONS[current].id === "chart") drawChart();
+  }
+
+  if (moveFocus) {
+    window.scrollTo(0, 0);
+    if (home) document.getElementById("tiles").querySelector("a")?.focus({ preventScroll: true });
+    else document.querySelector("#" + SECTIONS[current].panel + " h2")?.focus({ preventScroll: true });
+  }
+}
+
+function go(delta) {
+  if (current === null) return;
+  const i = current + delta;
+  if (i >= 0 && i < SECTIONS.length) location.hash = SECTIONS[i].id;
+}
+
+window.addEventListener("hashchange", () => showView(true));
+document.addEventListener("keydown", e => {
+  if (current === null || (e.target.closest && e.target.closest("input, textarea"))) return;
+  if (e.key === "ArrowRight") go(1);
+  else if (e.key === "ArrowLeft") go(-1);
+  else if (e.key === "Escape") location.hash = "";
+});
+
+// Swipe left/right inside a section (ignored on the slider and the chart).
+let touch = null;
+document.getElementById("main").addEventListener("touchstart", e => {
+  if (current === null || e.target.closest("input, canvas")) { touch = null; return; }
+  touch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+}, { passive: true });
+document.getElementById("main").addEventListener("touchend", e => {
+  if (!touch) return;
+  const dx = e.changedTouches[0].clientX - touch.x, dy = e.changedTouches[0].clientY - touch.y;
+  touch = null;
+  if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.8) go(dx < 0 ? 1 : -1);
+}, { passive: true });
+
+// ---- Chart ----
 function updateLive() {
   const T = CONTENT[lang];
   const n = +document.getElementById("nSlider").value;
@@ -643,23 +897,19 @@ const markers = {
     const meta = c.getDatasetMeta(0), ctx = c.ctx;
     const p10 = meta.data[9], p11 = meta.data[10], p14 = meta.data[13];
     ctx.save();
-    // shaded band around the 10 → 11 drop
     ctx.fillStyle = "rgba(138,90,0,.10)";
     const bx = p10.x - 6, bw = (p11.x - p10.x) + 12;
     ctx.fillRect(bx, c.chartArea.top, bw, c.chartArea.bottom - c.chartArea.top);
-    // drop segment
     ctx.strokeStyle = inf; ctx.lineWidth = 4; ctx.lineCap = "round";
     ctx.beginPath(); ctx.moveTo(p10.x, p10.y); ctx.lineTo(p11.x, p11.y); ctx.stroke();
     [p10, p11].forEach(p => { ctx.fillStyle = inf; ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI * 2); ctx.fill(); });
     ctx.font = "600 12px " + css.getPropertyValue("--sans");
     ctx.fillStyle = inf; ctx.textAlign = "left";
     ctx.fillText("10 → 11: 7.0 → 6.6", bx + bw + 6, c.chartArea.top + 12);
-    // n = 14 example
     ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.fillStyle = "#fff";
     ctx.beginPath(); ctx.arc(p14.x, p14.y, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     ctx.fillStyle = accent; ctx.textAlign = "left";
     ctx.fillText("n = 14 → 8.4", p14.x + 4, p14.y + 22);
-    // slider position
     const n = c.$selected;
     if (n) {
       const p = meta.data[n - 1];
@@ -680,7 +930,7 @@ function drawChart() {
   const ink2 = css.getPropertyValue("--ink-2").trim();
   const line = css.getPropertyValue("--line").trim();
   if (chart) chart.destroy();
-  chart = new Chart(document.getElementById("chart"), {
+  chart = new Chart(document.getElementById("chartCanvas"), {
     type: "line",
     data: { labels: N, datasets: [{
       label: T.chart.series, data: N.map(billed),
@@ -711,11 +961,16 @@ function drawChart() {
   chart.update("none");
 }
 
-// Print: swap the canvas for a static image so it prints crisply.
+// Print: show every section and swap the canvas for a static image.
 window.addEventListener("beforeprint", () => {
-  if (!chart) return;
-  const img = document.getElementById("chartImg");
-  img.src = chart.toBase64Image("image/png", 1);
+  document.body.classList.add("printing");
+  document.getElementById("hero").hidden = false;
+  drawChart();
+  if (chart) document.getElementById("chartImg").src = chart.toBase64Image("image/png", 1);
+});
+window.addEventListener("afterprint", () => {
+  document.body.classList.remove("printing");
+  showView(false);
 });
 
 // ---- Language: ?lang= in URL > saved choice > English ----
@@ -729,7 +984,7 @@ function setLang(l) {
   lang = l;
   try { localStorage.setItem("lang", l); } catch (e) {}
   try {
-    const u = new URL(location.href);
+    const u = new URL(location.href);   // keeps the #section part
     if (l === "en") u.searchParams.delete("lang"); else u.searchParams.set("lang", l);
     history.replaceState(null, "", u);
   } catch (e) {}
