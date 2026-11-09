@@ -10,7 +10,7 @@ Open `index.html` and scroll to the top of the `<script>` block. All text lives 
 | Object     | What it holds                                                                  |
 |------------|--------------------------------------------------------------------------------|
 | `ORIGINAL` | Chinese source quotes. Shown identically in both languages, so edit them once. |
-| `LINKS`    | Dashboard and LinkedIn URLs.                                                   |
+| `LINKS`    | LinkedIn URL.                                                                  |
 | `CONTENT.en` / `CONTENT.zh` | Every other string, with the same keys in both languages.     |
 
 Tips:

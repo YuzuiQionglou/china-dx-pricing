@@ -148,6 +148,7 @@
   .field { font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); font-weight: 600; margin: 14px 0 4px; }
   .orig { font-family: var(--serif); font-size: 15.5px; background: var(--bg); border-left: 3px solid var(--accent); padding: 8px 10px; margin: 0; }
   .orig p { margin: 0 0 4px; } .orig p:last-child { margin: 0; }
+  .card p.translation { font-size: 14.5px; color: var(--ink-2); font-style: italic; }
   .src { font-size: 14px; color: var(--ink-2); margin: 0; }
   .doc { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin: 0 0 16px; font-size: 15px; }
   .doc .zh-doc { font-family: var(--serif); font-weight: 600; }
@@ -323,7 +324,6 @@
   <section class="panel prose" id="p-method" data-panel hidden aria-labelledby="h-method">
     <h2 id="h-method" tabindex="-1"><span class="sec-num">06</span><span data-t="method.heading"></span></h2>
     <p data-t="method.body"></p>
-    <p><strong data-t="method.dashboardLabel"></strong>: <span id="dashLink"></span></p>
   </section>
 
   <!-- 07. About -->
@@ -356,15 +356,14 @@
 
 const ORIGINAL = {
   docTitle: "检验类医疗服务价格项目立项指南（试行）",
-  fact1: ["[PASTE ORIGINAL TEXT]"],
-  fact2: ["[PASTE ORIGINAL TEXT]"],
-  fact3: ['本项目计价单位所称的"项"指每种病原体。', "[PASTE ORIGINAL TIER RULE]"],
+  fact1: ["地方医疗保障部门制定检验类医疗服务项目价格时，要充分考虑主流检验方法；各地医疗保障部门所定价格属于政府指导价为最高限价，下浮不限。"],
+  fact2: ["本立项指南中所称“基本物质资源消耗”，指检验操作过程中所涉及的试剂（含检测试剂，以及质控液、校准液、固定液等辅助试剂）、样本采集器、操作器具等各项基本物质资源消耗，相关成本计入项目价格，不得另行收费。"],
+  fact3: ['本项目计价单位所称的"项"指每种病原体。', "医疗机构通过联检方式一次性检测多个检验指标的，应按一定比例进行计价收费，其中联检指标≤5个的，各项检验按80%计价；检验指标≤10个的，各项检验按70%计价；联检指标＞10个的，各项检验按60%计价。"],
   nmpaReg: "国械注进20223400387"
 };
 
 const LINKS = {
-  dashboard: "[DASHBOARD_URL]",
-  linkedin: "[LINKEDIN_URL]"
+  linkedin: "https://www.linkedin.com/in/qiongyiwu/"
 };
 
 const CONTENT = {
@@ -393,7 +392,7 @@ const CONTENT = {
         { short: "Impact", teaser: "Panel size, pricing units, reagent prices", tags: ["inference"] },
         { short: "Workflow", teaser: "Blood culture → Identification → Susceptibility → Molecular → PCT", tags: ["fact", "verify"] },
         { short: "Open questions", stat: "5", teaser: "Open questions", tags: ["verify"] },
-        { short: "Method", teaser: "How I read the text, and the full dashboard", tags: [] },
+        { short: "Method", teaser: "How I read the text and separated facts from inferences", tags: [] },
         { short: "About", teaser: "Who made this", tags: [] }
       ]
     },
@@ -413,16 +412,21 @@ const CONTENT = {
       docPublisher: ", National Healthcare Security Administration (NHSA), published August 2026.",
       fieldPlain: "In plain English",
       fieldOrig: "Original text",
+      fieldTranslation: "Unofficial translation",
       fieldSource: "Source",
+      // "translation" is optional: shown under the original text when present.
       cards: [
-        { title: "Prices are ceilings",
+        { title: "Government-guided prices are ceilings",
           body: "Provinces set the actual prices. They are maximum prices, and hospitals may charge less.",
+          translation: "When setting prices for laboratory testing services, local healthcare security authorities must give due consideration to commonly used testing methods. The government-guided prices they set are ceilings, with no limit on downward adjustments.",
           orig: "fact1", source: "Usage notes, item 2" },
-        { title: "Reagent costs are included",
-          body: "The cost of reagents is part of the test price and cannot be charged separately.",
+        { title: "Reagent costs are included in the test fee",
+          body: "Reagents, specimen collection devices and the tools used to perform the test are part of the test price and cannot be billed separately.",
+          translation: "Under these Guidelines, “basic material inputs” include assay reagents, ancillary reagents such as quality control solutions, calibration solutions, and fixatives, as well as specimen collection devices, tools used to perform the test, and other basic materials. These costs are included in the price of the item and may not be billed separately.",
           orig: "fact2", source: "Usage notes, item 6" },
-        { title: "Multiplex PCR is priced per pathogen",
+        { title: "Multiplex PCR is billed per pathogen",
           body: "Item 175 (pathogen nucleic acid amplification testing) counts each pathogen as one billing unit. In combined testing, each item is billed at 80% when there are up to 5 pathogens, 70% up to 10, and 60% above 10.",
+          translation: "When a healthcare provider tests multiple parameters in a single multiplex run, each test is billed at a percentage of its applicable price. The rate is 80% when up to 5 parameters are tested, 70% when 6 to 10 parameters are tested, and 60% when more than 10 parameters are tested.",
           orig: "fact3", source: "Annex 1, item 175, pricing notes" }
       ]
     },
@@ -483,12 +487,11 @@ const CONTENT = {
     },
     method: {
       heading: "How I did this",
-      body: "I read the national guideline and its annex, extracted the relevant items with Python, and separated facts, inferences and open questions. English translations are unofficial. Built with Python and AI assistance.",
-      dashboardLabel: "Full dashboard"
+      body: "I read the national guideline and its annex, extracted the relevant items with Python, and separated facts, inferences and open questions. English translations are unofficial. Built with Python and AI assistance."
     },
     about: {
       heading: "About me",
-      bio: "[ONE-LINE BIO]"
+      bio: "Jade (Qiongyi) Wu — MSc in Healthcare Innovation & Data Science at emlyon business school, Lyon. Twelve years in policy and performance analysis in China; now focused on how Chinese pricing and reimbursement rules shape diagnostics. I built this page to test whether I could read a pricing guideline closely enough to find something non-obvious in it."
     },
     footer: {
       text: "Based on public documents as of November 2026. Not affiliated with bioMérieux or any other company. English translations are unofficial. This is not legal or pricing advice."
@@ -519,7 +522,7 @@ const CONTENT = {
         { short: "影响", teaser: "检测组合规模 · 计价单位 · 试剂价格", tags: ["inference"] },
         { short: "流程", teaser: "血培养 → 鉴定 → 药敏 → 分子 → PCT", tags: ["fact", "verify"] },
         { short: "待解问题", stat: "5", teaser: "个尚待解答的问题", tags: ["verify"] },
-        { short: "方法", teaser: "我如何阅读原文，以及完整数据看板", tags: [] },
+        { short: "方法", teaser: "我如何阅读原文，并区分事实与推断", tags: [] },
         { short: "关于", teaser: "关于作者", tags: [] }
       ]
     },
@@ -530,7 +533,7 @@ const CONTENT = {
     },
     header: {
       title: "中国检验类医疗服务价格新规：对诊断行业意味着什么",
-      subtitle: "基于公开文件的学习项目，作者：Jade (Qiongyi) Wu"
+      subtitle: "基于公开文件的学习项目，作者：邬琼逸 (Jade Wu)"
     },
     rules: {
       heading: "30秒看懂新规",
@@ -545,7 +548,7 @@ const CONTENT = {
           body: "实际价格由各省确定。这些价格是最高限价，医院可以低于该价格收费。",
           orig: "fact1", source: "使用说明第2条" },
         { title: "试剂费用已包含在内",
-          body: "试剂成本计入检验项目价格，不得另行收费。",
+          body: "检验所用的试剂、样本采集器和操作器具等，成本都计入项目价格，不得另行收费。",
           orig: "fact2", source: "使用说明第6条" },
         { title: "多重PCR按病原体计价",
           body: "第175项（病原体核酸扩增检测）以每种病原体为一个计价单位。联合检测时，病原体不超过5种的，每项按80%计费；不超过10种的，按70%计费；超过10种的，按60%计费。",
@@ -609,12 +612,11 @@ const CONTENT = {
     },
     method: {
       heading: "研究方法",
-      body: "我阅读了国家指南及其附件，用Python提取了相关项目，并将事实、推断和待解决的问题分开呈现。英文翻译为非官方翻译。本项目借助Python和AI辅助完成。",
-      dashboardLabel: "完整数据看板"
+      body: "我阅读了国家指南及其附件，用Python提取了相关项目，并将事实、推断和待解决的问题分开呈现。英文翻译为非官方翻译。本项目借助Python和AI辅助完成。"
     },
     about: {
       heading: "关于我",
-      bio: "[ONE-LINE BIO]"
+      bio: "邬琼逸——法国里昂商学院 Healthcare Innovation & Data Science 硕士在读。此前十二年从事政策与绩效分析，现在关注中国的价格与报销规则如何影响体外诊断。做这个页面，是想验证自己能不能把一份定价指南读到足够细，细到发现一些不显然的东西。"
     },
     footer: {
       text: "基于截至2026年11月的公开文件。与bioMérieux或任何其他公司均无关联。英文翻译为非官方翻译。本文不构成法律或定价建议。"
@@ -742,6 +744,10 @@ function render() {
     const q = el("blockquote", "orig"); q.lang = "zh-CN";
     ORIGINAL[c.orig].forEach(line => q.appendChild(el("p", null, line)));
     card.appendChild(q);
+    if (c.translation) {
+      card.appendChild(el("div", "field", T.rules.fieldTranslation));
+      card.appendChild(el("p", "translation", c.translation));
+    }
     card.appendChild(el("div", "field", T.rules.fieldSource));
     card.appendChild(el("p", "src", c.source));
     fc.appendChild(card);
@@ -786,7 +792,6 @@ function render() {
   });
 
   setText(document.querySelector('[data-t="chart.note14"]'), fill(T.chart.note14, { reg: ORIGINAL.nmpaReg }));
-  linkOrPlaceholder(document.getElementById("dashLink"), LINKS.dashboard);
   linkOrPlaceholder(document.getElementById("liLink"), LINKS.linkedin);
 
   document.getElementById("chartCanvas").setAttribute("aria-label", T.ui.chartAria);
