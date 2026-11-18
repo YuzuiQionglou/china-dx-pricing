@@ -199,6 +199,8 @@
   .qlist li .q { font-weight: 700; color: var(--ver); }
 
   .prose p { margin: 0 0 10px; }
+  .srclist { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 15px; }
+  .srclist .meta { color: var(--ink-2); }
   footer.site { margin-top: 40px; border-top: 1px solid var(--line); background: var(--surface); }
   footer.site p { font-size: 13.5px; color: var(--ink-2); margin: 0; padding: 20px 0 32px; }
 
@@ -327,6 +329,8 @@
   <section class="panel prose" id="p-method" data-panel hidden aria-labelledby="h-method">
     <h2 id="h-method" tabindex="-1"><span class="sec-num">06</span><span data-t="method.heading"></span></h2>
     <p data-t="method.body"></p>
+    <h3 data-t="method.sourcesHeading"></h3>
+    <ul class="srclist" id="srcList"></ul>
   </section>
 
   <!-- 07. About -->
@@ -365,6 +369,17 @@ const ORIGINAL = {
   fact3: ['本项目计价单位所称的"项"指每种病原体。', "医疗机构通过联检方式一次性检测多个检验指标的，应按一定比例进行计价收费，其中联检指标≤5个的，各项检验按80%计价；检验指标≤10个的，各项检验按70%计价；联检指标＞10个的，各项检验按60%计价。"],
   nmpaReg: "国械注进20223400387"
 };
+
+// Sources, shown in section 06 ("How I did this"). Same list in both languages.
+const SOURCES = [
+  { org: "NHSA", title: "Lab-test price item guide released", date: "14 Aug 2026", url: "https://www.nhsa.gov.cn/art/2026/8/14/art_14_21764.html" },
+  { org: "NHSA", title: "Notice on the pre-listing mechanism for new technologies (Yibaofa [2026] No. 23)", date: "15 Sept 2026", url: "https://www.nhsa.gov.cn/art/2026/9/15/art_104_22141.html" },
+  { org: "bioMérieux", title: "H1 2026 results call (transcript)", date: "28 July 2026", url: "https://www.biomerieux.com/content/dam/biomerieux-com/investor/02---news---reports/2026/en/transcript/bioMerieux-Half-Year-2026-Results---28.07.2026-TRANSCRIPT-checked.pdf" },
+  { org: "NHC and 12 other bodies", title: "National Action Plan to Contain AMR (2022–2025)", date: "Oct 2022", url: "https://www.cn-healthcare.com/articlewm/20221031/content-1458660.html" },
+  { org: "Infection and Drug Resistance", title: "Article citing the 2021 pathogen-testing targets", date: "", url: "https://www.tandfonline.com/doi/abs/10.2147/IDR.S547418" },
+  { org: "NHC", title: "2026 national medical quality and safety improvement targets", date: "March 2026", url: "https://www.nhc.gov.cn/yzygj/c100068/202603/9f642951b99c447f8cff9da8abb74dc3/files/1.2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%8C%BB%E7%96%97%E8%B4%A8%E9%87%8F%E5%AE%89%E5%85%A8%E6%94%B9%E8%BF%9B%E7%9B%AE%E6%A0%87.pdf" },
+  { org: "IIVD.net", title: "Breakdown of the guide's 662 items (industry analysis)", date: "Aug 2026", url: "https://www.iivd.net/article-46727-1.html" }
+];
 
 const LINKS = {
   linkedin: "https://www.linkedin.com/in/qiongyiwu/"
@@ -492,7 +507,8 @@ const CONTENT = {
     },
     method: {
       heading: "How I did this",
-      body: "I read the national guideline and its annex, extracted the relevant items with Python, and separated facts, inferences and open questions. English translations are unofficial. Built with Python and AI assistance."
+      body: "I read the national guideline and its annex, extracted the relevant items with Python, and separated facts, inferences and open questions. English translations are unofficial. Built with Python and AI assistance.",
+      sourcesHeading: "Sources"
     },
     about: {
       heading: "About me",
@@ -619,7 +635,8 @@ const CONTENT = {
     },
     method: {
       heading: "研究方法",
-      body: "我阅读了国家指南及其附件，用Python提取了相关项目，并将事实、推断和待解决的问题分开呈现。英文翻译为非官方翻译。本项目借助Python和AI辅助完成。"
+      body: "我阅读了国家指南及其附件，用Python提取了相关项目，并将事实、推断和待解决的问题分开呈现。英文翻译为非官方翻译。本项目借助Python和AI辅助完成。",
+      sourcesHeading: "来源"
     },
     about: {
       heading: "关于我",
@@ -801,6 +818,15 @@ function render() {
 
   setText(document.querySelector('[data-t="chart.note14"]'), fill(T.chart.note14, { reg: ORIGINAL.nmpaReg }));
   linkOrPlaceholder(document.getElementById("liLink"), LINKS.linkedin);
+  const sl = document.getElementById("srcList"); sl.textContent = "";
+  SOURCES.forEach(x => {
+    const li = el("li");
+    li.appendChild(document.createTextNode(x.org + ", "));
+    const a = document.createElement("a"); a.href = x.url; a.textContent = x.title; a.rel = "noopener"; a.target = "_blank";
+    li.appendChild(a);
+    if (x.date) li.appendChild(el("span", "meta", ", " + x.date));
+    sl.appendChild(li);
+  });
   document.querySelectorAll("a.to-global").forEach(a => { a.href = "global.html" + (lang === "zh" ? "?lang=zh" : ""); });
 
   document.getElementById("chartCanvas").setAttribute("aria-label", T.ui.chartAria);
