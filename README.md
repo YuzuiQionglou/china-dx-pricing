@@ -3,7 +3,32 @@
 A single-page, bilingual (English / 中文) brief on the NHSA guideline
 检验类医疗服务价格项目立项指南（试行）. Everything is in one file: `index.html`.
 
-## Edit the wording
+## Pages
+
+| File | What it is |
+|---|---|
+| `index.html` | The pricing brief (7 sections) |
+| `global.html` | Chinese IVD companies going global: what to watch |
+| `data/ivd-global.js` | **All numbers for `global.html`** (revenue, growth, signals, sources) |
+
+`index.html` links to `global.html` from the overview and from "About me", and back.
+
+## Update the global page (each quarter)
+
+Open `data/ivd-global.js`. Each company is one `{ ... }` block:
+
+- `total`, `overseas.revenue`, `domestic.revenue` are in RMB 亿元 (100 million).
+  The page converts them itself: `176.50` becomes "RMB 17.65bn" in English and "176.50亿元" in Chinese.
+- `growth` is the year-on-year change in %, as reported (use a minus sign for a fall: `-22.97`).
+- `signals.en` / `signals.zh`: one line per signal, same order in both languages.
+- `sources`: one `{ label, url }` per source. Every number should have one.
+- To add a company, copy a whole block and change the values. The chart, cards and table update on their own.
+- Change `fiscalYear` and `asOf` at the top when you move to a new year.
+
+The wording of `global.html` (headings, tracking list, method) is in the `CONTENT` object at the top
+of its `<script>` block, same idea as `index.html`.
+
+## Edit the wording (index.html)
 
 Open `index.html` and scroll to the top of the `<script>` block. All text lives there:
 

@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chinese IVD companies going global: what to watch</title>
+<meta name="description" content="A learning project based on public company reports, by Jade (Qiongyi) Wu">
+<meta property="og:title" content="Chinese IVD companies going global: what to watch">
+<meta property="og:description" content="A learning project based on public company reports, by Jade (Qiongyi) Wu">
+<meta property="og:type" content="article">
+<style>
+  /* Same look as index.html */
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --ink: #1c2126;
+    --ink-2: #4a525b;
+    --line: #dcd9d2;
+    --accent: #1f4e79;
+    --accent-soft: #e6edf4;
+    --fact: #1f4e79;   --fact-bg: #e6edf4;
+    --inf: #8a5a00;    --inf-bg: #f6eedc;
+    --ver: #5a5f66;    --ver-bg: #efefed;
+    /* chart series (checked for colour-blind separation) */
+    --s-overseas: #2e6bb0;
+    --s-domestic: #b07a1a;
+    --serif: "Iowan Old Style", "Palatino Linotype", Georgia, "Songti SC", "Noto Serif SC", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.6; }
+  [hidden] { display: none !important; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .skip { position: absolute; left: -9999px; }
+  .skip:focus { left: 16px; top: 8px; background: var(--surface); padding: 8px 12px; z-index: 30; }
+
+  header.site { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .topbar { display: flex; align-items: center; gap: 10px; min-height: 56px; }
+  .back { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 15px; font-weight: 600; color: var(--accent); padding: 8px 10px 8px 0; min-height: 44px; }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-left: auto; flex: none; }
+  .lang button { font: inherit; font-size: 14px; border: 0; background: transparent; color: var(--ink-2); padding: 6px 14px; cursor: pointer; min-height: 36px; }
+  .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .hero { padding: 8px 0 28px; }
+  .kicker { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 6.4vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -.01em; }
+  .subtitle { color: var(--ink-2); margin: 0; font-size: 17px; }
+
+  main section { padding: 26px 0 6px; }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(24px, 5vw, 30px); line-height: 1.2; margin: 0 0 8px; }
+  .sec-num { display: block; font-family: var(--sans); font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: .06em; margin-bottom: 4px; }
+  .lead { color: var(--ink-2); margin: 0 0 18px; }
+  h3 { font-size: 18px; line-height: 1.3; margin: 8px 0 6px; }
+
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; line-height: 1; padding: 5px 9px; border-radius: 4px; border: 1px solid transparent; white-space: nowrap; }
+  .tag::before { content: ""; width: 8px; height: 8px; display: inline-block; flex: none; }
+  .tag.fact { color: var(--fact); background: var(--fact-bg); border-color: #c4d3e3; }
+  .tag.fact::before { background: var(--fact); border-radius: 50%; }
+  .tag.inference { color: var(--inf); background: var(--inf-bg); border-color: #e6d3a8; }
+  .tag.inference::before { background: var(--inf); transform: rotate(45deg); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+  .src { font-size: 14px; color: var(--ink-2); margin: 6px 0 0; }
+
+  /* 01 drivers */
+  .drivers { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .drivers li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+  .drivers li p { margin: 8px 0 0; }
+
+  /* 02 chart: diverging bars, one axis (growth %) */
+  .chart-box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; position: relative; }
+  .chart-head { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--ink); margin: 0; padding: 0; list-style: none; }
+  .legend li { display: inline-flex; align-items: center; gap: 7px; }
+  .sw { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+  .crow { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 6px 12px; align-items: center; margin-bottom: 14px; }
+  .cname { font-weight: 600; font-size: 15px; line-height: 1.25; }
+  .cname small { display: block; font-weight: 400; font-size: 12.5px; color: var(--ink-2); }
+  .bars { position: relative; display: grid; gap: 2px; padding: 2px 0; }
+  .track { position: relative; height: 22px; cursor: default; }
+  .bar { position: absolute; top: 4px; height: 14px; }
+  .bar.pos { border-radius: 0 4px 4px 0; }
+  .bar.neg { border-radius: 4px 0 0 4px; }
+  .val { position: absolute; top: 1px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .track:hover .bar, .track:focus .bar { filter: brightness(1.1); }
+  .axis { position: relative; height: 22px; font-size: 12.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .axis span { position: absolute; top: 2px; transform: translateX(-50%); }
+  .axis-title { font-size: 13px; color: var(--ink-2); margin: 4px 0 0; text-align: center; }
+  @media (max-width: 559px) { .crow { grid-template-columns: 1fr; } .crow .spacer { display: none; } }
+  .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 13.5px; line-height: 1.35; padding: 7px 10px; border-radius: 6px; max-width: 260px; z-index: 5; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+  .caption { font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
+  details.tbl { margin-top: 12px; font-size: 14.5px; }
+  details.tbl summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+  .tbl-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+
+  /* 03 company cards */
+  .cards { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .card .ticker { font-size: 13px; color: var(--ink-2); margin: 0 0 10px; }
+  .stats { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin: 0 0 12px; }
+  .stats div { background: var(--bg); border-radius: 8px; padding: 8px; }
+  .stats .k { display: block; font-size: 11.5px; color: var(--ink-2); line-height: 1.25; }
+  .stats .v { display: block; font-family: var(--serif); font-weight: 600; font-size: 16px; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .field { font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); font-weight: 600; margin: 12px 0 4px; }
+  .card ul { margin: 0; padding-left: 18px; font-size: 14.5px; display: grid; gap: 4px; }
+  .card .note { font-size: 14px; color: var(--ink-2); font-style: italic; margin: 0; }
+  .card ul.srcs { list-style: none; padding: 0; font-size: 13.5px; }
+
+  /* 04 tracking list */
+  .track-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: t; }
+  .track-list li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px 10px 50px; position: relative; counter-increment: t; }
+  .track-list li::before { content: counter(t); position: absolute; left: 14px; top: 10px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; display: grid; place-items: center; }
+  .track-list strong { display: block; }
+  .track-list span { font-size: 14.5px; color: var(--ink-2); }
+
+  .prose ul { padding-left: 20px; margin: 0; display: grid; gap: 6px; }
+  .prose p { margin: 0 0 10px; }
+  footer.site { margin-top: 40px; border-top: 1px solid var(--line); background: var(--surface); }
+  footer.site p { font-size: 13.5px; color: var(--ink-2); margin: 0; padding: 20px 0 32px; }
+
+  @media print {
+    @page { margin: 14mm; }
+    body { background: #fff; font-size: 10.5pt; line-height: 1.4; }
+    .no-print, .skip, .tip { display: none !important; }
+    header.site, footer.site { background: #fff; border: 0; }
+    h1 { font-size: 20pt; } h2 { font-size: 13.5pt; }
+    main section { padding: 10pt 0 0; }
+    .card, .chart-box, .drivers li, .track-list li { padding: 7pt 9pt; break-inside: avoid; }
+    .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7pt; }
+    details.tbl { display: none; }
+    a[data-print-url]::after { content: " (" attr(href) ")"; font-size: 8pt; color: var(--ink-2); word-break: break-all; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-t="ui.skip"></a>
+
+<header class="site">
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back no-print" id="backLink" href="index.html"><span aria-hidden="true">←</span><span data-t="ui.back"></span></a>
+      <div class="lang no-print" role="group" id="langGroup">
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false" lang="zh">中文</button>
+      </div>
+    </div>
+    <div class="hero">
+      <p class="kicker" data-t="ui.kicker"></p>
+      <h1 data-t="header.title"></h1>
+      <p class="subtitle" data-t="header.subtitle"></p>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <section id="why" aria-labelledby="h-why">
+    <h2 id="h-why"><span class="sec-num">01</span><span data-t="why.heading"></span></h2>
+    <p class="lead" data-t="why.lead"></p>
+    <ul class="drivers" id="drivers"></ul>
+  </section>
+
+  <section id="chart" aria-labelledby="h-chart">
+    <h2 id="h-chart"><span class="sec-num">02</span><span id="chartHeading"></span></h2>
+    <p class="lead" data-t="chart.lead"></p>
+    <div class="chart-box" id="chartBox">
+      <div class="chart-head">
+        <span class="tag fact" data-t="labels.fact"></span>
+        <ul class="legend" id="legend"></ul>
+      </div>
+      <div id="chartRows"></div>
+      <div class="tip" id="tip" role="status" hidden></div>
+      <p class="caption" data-t="chart.caption"></p>
+      <details class="tbl">
+        <summary data-t="chart.showTable"></summary>
+        <div class="tbl-wrap"><table id="dataTable"></table></div>
+      </details>
+    </div>
+  </section>
+
+  <section id="companies" aria-labelledby="h-co">
+    <h2 id="h-co"><span class="sec-num">03</span><span data-t="companies.heading"></span></h2>
+    <p class="lead" id="coLead"></p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section id="track" aria-labelledby="h-track">
+    <h2 id="h-track"><span class="sec-num">04</span><span data-t="track.heading"></span></h2>
+    <p class="lead" data-t="track.lead"></p>
+    <ol class="track-list" id="trackList"></ol>
+  </section>
+
+  <section id="method" class="prose" aria-labelledby="h-method">
+    <h2 id="h-method"><span class="sec-num">05</span><span data-t="method.heading"></span></h2>
+    <ul id="methodList"></ul>
+  </section>
+
+  <section id="about" class="prose" aria-labelledby="h-about">
+    <h2 id="h-about"><span class="sec-num">06</span><span data-t="about.heading"></span></h2>
+    <p data-t="about.bio"></p>
+    <p><a href="index.html" id="briefLink" data-t="about.brief"></a></p>
+    <p><strong>LinkedIn</strong>: <a href="https://www.linkedin.com/in/qiongyiwu/" rel="noopener" target="_blank" data-print-url>linkedin.com/in/qiongyiwu/</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap"><p id="footerText"></p></div>
+</footer>
+
+<noscript><div class="wrap"><p>This page needs JavaScript to display its content.</p></div></noscript>
+
+<!-- All numbers live in this file. Edit it to update the page. -->
+<script src="data/ivd-global.js"></script>
+<script>
+/* =====================================================================
+   EDIT WORDING HERE. Numbers are NOT here: they are in data/ivd-global.js.
+   In strings, {year} {asOf} {company} {series} {money} {pct} are filled in
+   automatically. Keep them.
+   ===================================================================== */
+const CONTENT = {
+  en: {
+    ui: { skip: "Skip to content", back: "Pricing brief", langGroup: "Choose language", kicker: "Market watch · Diagnostics" },
+    header: {
+      title: "Chinese IVD companies going global: what to watch",
+      subtitle: "A learning project based on public company reports, by Jade (Qiongyi) Wu"
+    },
+    labels: { fact: "Fact (company reports)", inference: "Inference (my analysis)" },
+    why: {
+      heading: "Why watch this",
+      lead: "Pricing reforms are squeezing revenue at home. The question is where these companies go next."
+    },
+    chart: {
+      heading: "Home vs abroad, {year}",
+      lead: "Revenue growth compared with the previous year, as reported. China revenue fell at all three companies; overseas revenue grew at all three.",
+      domestic: "China revenue",
+      overseas: "Overseas revenue",
+      axis: "Revenue growth vs previous year (%)",
+      tooltip: "{company} · {series}: {money}, {pct} vs previous year",
+      caption: "Growth in RMB. China and overseas may not add up to the total because of other revenue. Mindray figures are group-level.",
+      showTable: "Show as a table",
+      th: ["Company", "China revenue", "Growth", "Overseas revenue", "Growth", "Overseas share"]
+    },
+    companies: {
+      heading: "Company snapshots",
+      lead: "Key figures for {year}, plus signals worth following. Every figure links to its source.",
+      kOverseas: "Overseas revenue", kGrowth: "Growth", kShare: "% of total",
+      signals: "Signals", note: "Note", sources: "Sources"
+    },
+    track: {
+      heading: "What I would track",
+      lead: "A quarterly one-page brief, built from these indicators.",
+      items: [
+        ["Overseas revenue and growth, by region", "Half-year and annual reports, results calls"],
+        ["Regulatory footprint", "CE / IVDR certificates, new country registrations"],
+        ["Moves into new segments", "Microbiology, molecular and syndromic testing"],
+        ["Local presence", "Subsidiaries, local manufacturing, distributors"],
+        ["The China policy drivers behind the push", "VBP rounds, lab-test pricing, mutual recognition of results (see my pricing brief)"]
+      ]
+    },
+    method: {
+      heading: "Method and caveats",
+      items: [
+        "Figures come from Chinese-language coverage of company annual reports, results calls and broker notes. Each one links to its source; the original annual reports remain the reference.",
+        "Companies define “overseas” in slightly different ways. Growth rates are in RMB.",
+        "All numbers sit in one data file, so the chart, cards and table update together each quarter.",
+        "Built with Python and AI assistance. Not investment advice."
+      ]
+    },
+    about: {
+      heading: "About me",
+      bio: "Jade (Qiongyi) Wu — MSc in Healthcare Innovation & Data Science at emlyon business school, Lyon. I focus on how Chinese pricing and reimbursement rules shape the diagnostics market. This page builds on my brief on China's new lab-test pricing rules.",
+      brief: "Read the pricing brief →"
+    },
+    footer: "Based on public information as of {asOf}. Not affiliated with any company mentioned. Not investment advice."
+  },
+
+  zh: {
+    ui: { skip: "跳到正文", back: "价格新规简报", langGroup: "选择语言", kicker: "市场观察 · 诊断" },
+    header: {
+      title: "中国IVD企业出海：值得关注什么",
+      subtitle: "基于上市公司公开信息的学习项目，作者：邬琼逸 (Jade Wu)"
+    },
+    labels: { fact: "事实（公司公开信息）", inference: "推断（我的分析）" },
+    why: {
+      heading: "为什么值得关注",
+      lead: "价格改革正在压缩国内收入。问题是，这些企业接下来会去哪里。"
+    },
+    chart: {
+      heading: "国内与海外，{year}年",
+      lead: "收入同比增速（按公司披露）。三家公司的国内收入都在下降，海外收入都在增长。",
+      domestic: "国内收入",
+      overseas: "海外收入",
+      axis: "收入同比增速（%）",
+      tooltip: "{company} · {series}：{money}，同比{pct}",
+      caption: "按人民币计算。因存在其他收入，国内与海外收入之和可能不等于总收入。迈瑞为集团整体数据。",
+      showTable: "以表格查看",
+      th: ["公司", "国内收入", "同比", "海外收入", "同比", "海外占比"]
+    },
+    companies: {
+      heading: "公司速览",
+      lead: "{year}年关键数据，以及值得跟踪的信号。每个数字都附有来源。",
+      kOverseas: "海外收入", kGrowth: "同比", kShare: "占比",
+      signals: "信号", note: "注意", sources: "来源"
+    },
+    track: {
+      heading: "我会追踪什么",
+      lead: "基于以下指标，每季度出一页简报。",
+      items: [
+        ["分区域的海外收入与增速", "半年报、年报、业绩说明会"],
+        ["注册与认证布局", "CE / IVDR证书，新进入国家的注册"],
+        ["进入新领域", "微生物、分子、症候群检测"],
+        ["本地化布局", "海外子公司、本地化生产、经销商"],
+        ["背后的国内政策驱动", "集采、检验收费改革、检验结果互认（见我的价格新规简报）"]
+      ]
+    },
+    method: {
+      heading: "方法与注意事项",
+      items: [
+        "数据来自上市公司年报、业绩说明会及券商研报的中文报道，每个数字都附有来源链接，以年报原文为准。",
+        "各公司对“海外”的口径略有不同；增速按人民币计算。",
+        "所有数字集中在一个数据文件里，图表、卡片和表格每季度同步更新。",
+        "本项目借助Python和AI辅助完成。不构成投资建议。"
+      ]
+    },
+    about: {
+      heading: "关于我",
+      bio: "邬琼逸——法国里昂商学院 Healthcare Innovation & Data Science 硕士在读，关注中国的价格与报销规则如何影响体外诊断市场。本页是我此前《中国检验类医疗服务价格新规》简报的延伸。",
+      brief: "阅读价格新规简报 →"
+    },
+    footer: "基于截至{asOf}的公开信息。与文中提及的任何公司均无关联。不构成投资建议。"
+  }
+};
+
+/* ======================= Layout code below ========================== */
+
+const get = (obj, path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), obj);
+const fill = (tpl, vars) => tpl.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : `{${k}}`));
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+// 亿元 → "RMB 17.65bn" / "RMB 384m" (en) or "176.50亿元" (zh)
+function money(v, lang) {
+  if (lang === "zh") return v.toFixed(2) + "亿元";
+  return v >= 10 ? "RMB " + (v / 10).toFixed(2) + "bn" : "RMB " + Math.round(v * 100) + "m";
+}
+const pct = g => (g > 0 ? "+" : g < 0 ? "−" : "") + Math.abs(g).toFixed(1) + "%";
+const share = c => Math.round(c.overseas.revenue / c.total * 100) + "%";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function srcLink(s) {
+  const a = el("a", null, s.label);
+  a.href = s.url; a.rel = "noopener"; a.target = "_blank"; a.setAttribute("data-print-url", "");
+  return a;
+}
+
+let lang = "en";
+
+function renderChart(T) {
+  const series = [
+    { key: "domestic", label: T.chart.domestic, color: cssVar("--s-domestic") },
+    { key: "overseas", label: T.chart.overseas, color: cssVar("--s-overseas") }
+  ];
+  // legend
+  const lg = document.getElementById("legend"); lg.textContent = "";
+  series.forEach(s => {
+    const li = el("li"); const sw = el("span", "sw"); sw.style.background = s.color; sw.setAttribute("aria-hidden", "true");
+    li.appendChild(sw); li.appendChild(document.createTextNode(s.label)); lg.appendChild(li);
+  });
+
+  // one shared axis: growth %, padded so value labels fit
+  const all = DATA.companies.flatMap(c => [c.domestic.growth, c.overseas.growth]);
+  const lo = Math.min(-10, Math.floor(Math.min(...all) / 10) * 10 - 10);
+  const hi = Math.max(10, Math.ceil(Math.max(...all) / 10) * 10 + 10);
+  const pos = v => (v - lo) / (hi - lo) * 100;
+  const ticks = []; for (let t = Math.ceil(lo / 20) * 20; t <= hi; t += 20) ticks.push(t);
+  const line = cssVar("--line"), ink2 = cssVar("--ink-2");
+  const gridBg = ticks.map(t => {
+    const p = pos(t), c = t === 0 ? ink2 : line, w = t === 0 ? 1 : 0.5;
+    return `linear-gradient(to right, transparent calc(${p}% - ${w}px), ${c} calc(${p}% - ${w}px), ${c} calc(${p}% + ${w}px), transparent calc(${p}% + ${w}px))`;
+  }).join(",");
+
+  const rows = document.getElementById("chartRows"); rows.textContent = "";
+  DATA.companies.forEach(c => {
+    const row = el("div", "crow");
+    const nm = el("div", "cname", c.name[lang]); nm.appendChild(el("small", null, c.ticker));
+    row.appendChild(nm);
+    const bars = el("div", "bars"); bars.style.backgroundImage = gridBg;
+    series.forEach(s => {
+      const g = c[s.key].growth;
+      const tr = el("div", "track"); tr.tabIndex = 0;
+      const tipText = fill(T.chart.tooltip, { company: c.name[lang], series: s.label, money: money(c[s.key].revenue, lang), pct: pct(g) });
+      tr.setAttribute("aria-label", tipText); tr.dataset.tip = tipText;
+      const b = el("div", "bar " + (g >= 0 ? "pos" : "neg")); b.style.background = s.color;
+      const a = pos(Math.min(0, g)), z = pos(Math.max(0, g));
+      b.style.left = a + "%"; b.style.width = Math.max(z - a, 0.4) + "%";
+      tr.appendChild(b);
+      const v = el("span", "val", pct(g));
+      if (g >= 0) v.style.left = `calc(${z}% + 6px)`; else v.style.right = `calc(${100 - a}% + 6px)`;
+      tr.appendChild(v);
+      bars.appendChild(tr);
+    });
+    row.appendChild(bars);
+    rows.appendChild(row);
+  });
+  // axis
+  const ax = el("div", "crow");
+  ax.appendChild(el("div", "spacer"));
+  const axis = el("div", "axis");
+  ticks.forEach(t => { const s = el("span", null, (t > 0 ? "+" : t < 0 ? "−" : "") + Math.abs(t) + "%"); s.style.left = pos(t) + "%";
+    if (pos(t) < 6) s.style.transform = "none"; else if (pos(t) > 94) s.style.transform = "translateX(-100%)";  // keep edge labels inside
+    axis.appendChild(s); });
+  const axWrap = el("div"); axWrap.appendChild(axis); axWrap.appendChild(el("p", "axis-title", T.chart.axis));
+  ax.appendChild(axWrap); ax.style.marginBottom = "0";
+  rows.appendChild(ax);
+
+  // table view
+  const tb = document.getElementById("dataTable"); tb.textContent = "";
+  const hr = el("tr"); T.chart.th.forEach(h => hr.appendChild(el("th", null, h)));
+  const thead = el("thead"); thead.appendChild(hr); tb.appendChild(thead);
+  const tbody = el("tbody");
+  DATA.companies.forEach(c => {
+    const tr = el("tr");
+    [c.name[lang], money(c.domestic.revenue, lang), pct(c.domestic.growth), money(c.overseas.revenue, lang), pct(c.overseas.growth), share(c)]
+      .forEach(x => tr.appendChild(el("td", null, x)));
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);
+}
+
+// Tooltip: follows the pointer over a bar row; also shows on keyboard focus.
+const tip = document.getElementById("tip"), box = document.getElementById("chartBox");
+function showTip(tr, x, y) {
+  tip.textContent = tr.dataset.tip; tip.hidden = false;
+  const bw = box.clientWidth, tw = tip.offsetWidth;
+  tip.style.left = Math.min(Math.max(x + 12, 8), bw - tw - 8) + "px";
+  tip.style.top = (y - tip.offsetHeight - 10) + "px";
+}
+box.addEventListener("pointermove", e => {
+  const tr = e.target.closest(".track");
+  if (!tr) { tip.hidden = true; return; }
+  const r = box.getBoundingClientRect();
+  showTip(tr, e.clientX - r.left, e.clientY - r.top);
+});
+box.addEventListener("pointerleave", () => { tip.hidden = true; });
+box.addEventListener("focusin", e => {
+  const tr = e.target.closest(".track"); if (!tr) return;
+  const r = box.getBoundingClientRect(), t = tr.getBoundingClientRect();
+  showTip(tr, t.left - r.left + t.width / 2 - 60, t.top - r.top);
+});
+box.addEventListener("focusout", () => { tip.hidden = true; });
+
+function render() {
+  const T = CONTENT[lang];
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+  document.title = T.header.title;
+  document.querySelectorAll("[data-t]").forEach(e => { e.textContent = get(T, e.dataset.t) ?? ""; });
+  document.getElementById("langGroup").setAttribute("aria-label", T.ui.langGroup);
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  const q = lang === "zh" ? "?lang=zh" : "";
+  document.getElementById("backLink").href = "index.html" + q;
+  document.getElementById("briefLink").href = "index.html" + q;
+  document.getElementById("chartHeading").textContent = fill(T.chart.heading, { year: DATA.fiscalYear });
+  document.getElementById("coLead").textContent = fill(T.companies.lead, { year: DATA.fiscalYear });
+  document.getElementById("footerText").textContent = fill(T.footer, { asOf: DATA.asOf[lang] });
+
+  // 01 drivers
+  const dr = document.getElementById("drivers"); dr.textContent = "";
+  DATA.drivers.forEach(d => {
+    const li = el("li");
+    li.appendChild(el("span", "tag " + d.kind, T.labels[d.kind]));
+    li.appendChild(el("p", null, d[lang]));
+    if (d.source) { const s = el("p", "src"); s.appendChild(srcLink(d.source)); li.appendChild(s); }
+    dr.appendChild(li);
+  });
+
+  // 02 chart
+  renderChart(T);
+
+  // 03 cards
+  const cards = document.getElementById("cards"); cards.textContent = "";
+  DATA.companies.forEach(c => {
+    const card = el("article", "card");
+    card.appendChild(el("span", "tag fact", T.labels.fact));
+    card.appendChild(el("h3", null, c.name[lang]));
+    card.appendChild(el("p", "ticker", c.ticker));
+    const st = el("div", "stats");
+    [[T.companies.kOverseas, money(c.overseas.revenue, lang)], [T.companies.kGrowth, pct(c.overseas.growth)], [T.companies.kShare, share(c)]]
+      .forEach(([k, v]) => { const d = el("div"); d.appendChild(el("span", "k", k)); d.appendChild(el("span", "v", v)); st.appendChild(d); });
+    card.appendChild(st);
+    card.appendChild(el("div", "field", T.companies.signals));
+    const ul = el("ul"); c.signals[lang].forEach(s => ul.appendChild(el("li", null, s))); card.appendChild(ul);
+    if (c.caveat && c.caveat[lang]) { card.appendChild(el("div", "field", T.companies.note)); card.appendChild(el("p", "note", c.caveat[lang])); }
+    card.appendChild(el("div", "field", T.companies.sources));
+    const sl = el("ul", "srcs"); c.sources.forEach(s => { const li = el("li"); li.appendChild(srcLink(s)); sl.appendChild(li); }); card.appendChild(sl);
+    cards.appendChild(card);
+  });
+
+  // 04 tracking list
+  const tl = document.getElementById("trackList"); tl.textContent = "";
+  T.track.items.forEach(([t, d]) => { const li = el("li"); li.appendChild(el("strong", null, t)); li.appendChild(el("span", null, d)); tl.appendChild(li); });
+
+  // 05 method
+  const ml = document.getElementById("methodList"); ml.textContent = "";
+  T.method.items.forEach(m => ml.appendChild(el("li", null, m)));
+}
+
+// Language: ?lang= in URL > saved choice (shared with index.html) > English
+function initialLang() {
+  const q = new URLSearchParams(location.search).get("lang");
+  if (q && CONTENT[q]) return q;
+  try { const s = localStorage.getItem("lang"); if (s && CONTENT[s]) return s; } catch (e) {}
+  return "en";
+}
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("lang", l); } catch (e) {}
+  try {
+    const u = new URL(location.href);
+    if (l === "en") u.searchParams.delete("lang"); else u.searchParams.set("lang", l);
+    history.replaceState(null, "", u);
+  } catch (e) {}
+  render();
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+lang = initialLang();
+render();
+</script>
+</body>
+</html>

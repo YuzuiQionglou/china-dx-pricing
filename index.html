@@ -93,6 +93,8 @@
   .tile.featured .t-body { display: grid; gap: 4px 16px; grid-template-columns: 1fr; }
   @media (min-width: 560px) { .tile.featured .t-body { grid-template-columns: 1fr 1.2fr; align-items: center; } }
   .spark { width: 100%; height: 86px; display: block; }
+  .home-more { margin: 16px 0 0; font-size: 15px; }
+  .home-more a { font-weight: 600; }
   .tile .tag { font-size: 11px; padding: 4px 7px; white-space: normal; line-height: 1.25; max-width: 100%; }
   /* Keep tiles in reading order: 01 / 02 / 03·04 / 05·06 / 07 on phones,
      01·02(wide) / 03·04·05 / 06·07(wide) on larger screens */
@@ -257,6 +259,7 @@
   <section class="home" id="home" aria-label="Overview">
     <p class="home-intro" data-t="home.intro"></p>
     <div class="tiles" id="tiles"></div>
+    <p class="home-more"><a href="global.html" class="to-global" data-t="home.more"></a></p>
   </section>
 
   <!-- 01. The rules in 30 seconds -->
@@ -331,6 +334,7 @@
     <h2 id="h-about" tabindex="-1"><span class="sec-num">07</span><span data-t="about.heading"></span></h2>
     <p data-t="about.bio"></p>
     <p><strong>LinkedIn</strong>: <span id="liLink"></span></p>
+    <p class="no-print"><a href="global.html" class="to-global" data-t="about.more"></a></p>
   </section>
 
   <nav class="pager no-print" id="pager" hidden aria-label="Previous and next section"></nav>
@@ -385,6 +389,7 @@ const CONTENT = {
     },
     home: {
       intro: "Seven short sections. Tap one to open it.",
+      more: "Also: Chinese IVD companies going global →",
       // One tile per section, in order. "stat" is optional (big text on the tile).
       tiles: [
         { short: "Rules", teaser: "Ceiling prices · reagents included · PCR priced per pathogen", tags: ["fact"] },
@@ -491,7 +496,8 @@ const CONTENT = {
     },
     about: {
       heading: "About me",
-      bio: "Jade (Qiongyi) Wu — MSc in Healthcare Innovation & Data Science at emlyon business school, Lyon. Twelve years in policy and performance analysis in China; now focused on how Chinese pricing and reimbursement rules shape diagnostics. I built this page to test whether I could read a pricing guideline closely enough to find something non-obvious in it."
+      bio: "Jade (Qiongyi) Wu — MSc in Healthcare Innovation & Data Science at emlyon business school, Lyon. Twelve years in policy and performance analysis in China; now focused on how Chinese pricing and reimbursement rules shape diagnostics. I built this page to test whether I could read a pricing guideline closely enough to find something non-obvious in it.",
+      more: "Next: Chinese IVD companies going global →"
     },
     footer: {
       text: "Based on public documents as of November 2026. Not affiliated with bioMérieux or any other company. English translations are unofficial. This is not legal or pricing advice."
@@ -516,6 +522,7 @@ const CONTENT = {
     },
     home: {
       intro: "共七个板块，点击任一板块查看。",
+      more: "另见：中国IVD企业出海追踪 →",
       tiles: [
         { short: "规则", teaser: "最高限价 · 试剂费用包含在内 · PCR按病原体计价", tags: ["fact"] },
         { short: "悖论", stat: "7.0 → 6.6", teaser: "增加第11种病原体后，总计费如何变化", tags: ["inference"] },
@@ -616,7 +623,8 @@ const CONTENT = {
     },
     about: {
       heading: "关于我",
-      bio: "邬琼逸——法国里昂商学院 Healthcare Innovation & Data Science 硕士在读。此前十二年从事政策与绩效分析，现在关注中国的价格与报销规则如何影响体外诊断。做这个页面，是想验证自己能不能把一份定价指南读到足够细，细到发现一些不显然的东西。"
+      bio: "邬琼逸——法国里昂商学院 Healthcare Innovation & Data Science 硕士在读。此前十二年从事政策与绩效分析，现在关注中国的价格与报销规则如何影响体外诊断。做这个页面，是想验证自己能不能把一份定价指南读到足够细，细到发现一些不显然的东西。",
+      more: "下一篇：中国IVD企业出海追踪 →"
     },
     footer: {
       text: "基于截至2026年11月的公开文件。与bioMérieux或任何其他公司均无关联。英文翻译为非官方翻译。本文不构成法律或定价建议。"
@@ -793,6 +801,7 @@ function render() {
 
   setText(document.querySelector('[data-t="chart.note14"]'), fill(T.chart.note14, { reg: ORIGINAL.nmpaReg }));
   linkOrPlaceholder(document.getElementById("liLink"), LINKS.linkedin);
+  document.querySelectorAll("a.to-global").forEach(a => { a.href = "global.html" + (lang === "zh" ? "?lang=zh" : ""); });
 
   document.getElementById("chartCanvas").setAttribute("aria-label", T.ui.chartAria);
   document.getElementById("chartImg").alt = T.ui.chartImgAlt;
