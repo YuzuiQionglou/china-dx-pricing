@@ -84,6 +84,9 @@
   .tile:hover { border-color: var(--accent); box-shadow: 0 2px 10px rgba(31,78,121,.08); }
   .tile:active { transform: scale(.985); }
   .tile .t-num { font-size: 12.5px; font-weight: 700; color: var(--accent); letter-spacing: .06em; }
+  .tile .t-head { display: flex; align-items: center; gap: 8px; }
+  .t-ic { width: 28px; height: 28px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
+  .t-ic svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .tile .t-title { font-family: var(--serif); font-weight: 600; font-size: 17.5px; line-height: 1.25; }
   .tile .t-teaser { font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
   .tile .t-stat { font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1; color: var(--inf); font-variant-numeric: tabular-nums; }
@@ -179,19 +182,37 @@
   .step { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
   .step.is-verify { border: 1.5px dashed var(--ver); background: #fbfbfa; }
   .step.is-fact { border: 1.5px solid var(--accent); }
-  .step h3 { margin: 0 0 8px; font-size: 16.5px; }
+  .step h3 { margin: 0 0 8px; font-size: 16.5px; display: flex; align-items: center; gap: 8px; }
   .step ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14.5px; }
   .step ul li { padding-left: 12px; border-left: 2px solid var(--accent-soft); }
   .step .num { font-weight: 700; font-variant-numeric: tabular-nums; }
   .arrow { text-align: center; color: var(--ink-2); font-size: 20px; line-height: 1; padding: 6px 0; }
   .arrow::before { content: "↓"; }
-  @media (min-width: 900px) {
-    .flow { grid-template-columns: 1fr auto 1fr auto 1fr auto 1.6fr auto 1fr; align-items: stretch; }
-    .arrow { display: flex; align-items: center; padding: 0 4px; }
-    .arrow::before { content: "→"; }
+  @media (min-width: 720px) {
+    .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+    .flow .arrow { display: none; }
+    .step.wide { grid-column: span 2; }
+    .step.wide ul { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
   }
   .flow-note { margin: 14px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .flow-note p { margin: 0; flex: 1 1 260px; }
+
+  .step .tag { white-space: normal; line-height: 1.25; }
+  .step .impl { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 14px; }
+  .step .impl p { margin: 6px 0 0; }
+  .step .qlink { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 600; }
+
+  /* Open questions, grouped by step */
+  .qgroups { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .qgroups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .qgroup { background: var(--surface); border: 1px dashed var(--ver); border-radius: 10px; padding: 14px 16px; }
+  .qgroup header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .qgroup h3 { margin: 0; font-size: 16px; }
+  .qstep { min-width: 26px; height: 26px; padding: 0 6px; border-radius: 13px; background: var(--accent); color: #fff; font-weight: 700; font-size: 12.5px; display: grid; place-items: center; flex: none; }
+  .qgroup.is-cross .qstep { background: var(--ver); }
+  .qitems { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14.5px; }
+  .qitems li { display: flex; gap: 8px; align-items: baseline; }
+  .qitems .q { font-weight: 700; color: var(--ver); flex: none; }
 
   /* Lists */
   .qlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
@@ -217,11 +238,13 @@
     h2 { font-size: 13.5pt; }
     main .panel { padding: 10pt 0 0; }
     .lead { margin-bottom: 6pt; }
-    .card, .chart-box, .step, .doc, .flow-note, .qlist li { box-shadow: none; padding: 7pt 9pt; break-inside: avoid; }
+    .card, .chart-box, .step, .doc, .flow-note, .qlist li, .qgroup { box-shadow: none; padding: 7pt 9pt; break-inside: avoid; }
+    .qgroups { grid-template-columns: repeat(2, 1fr); gap: 7pt; }
+    .step .qlink { display: none; }
     .grid.three { grid-template-columns: repeat(3, 1fr); gap: 7pt; }
-    .flow { grid-template-columns: 1fr auto 1fr auto 1fr auto 1.6fr auto 1fr; }
-    .arrow { display: flex; align-items: center; padding: 0 2pt; }
-    .arrow::before { content: "→"; }
+    .flow { grid-template-columns: repeat(3, 1fr); gap: 7pt; }
+    .flow .arrow { display: none; }
+    .step.wide { grid-column: span 2; }
     .canvas-wrap { height: auto; }
     #chartCanvas { display: none !important; }
     #chartImg { display: block; max-height: 62mm; width: auto; margin: 0 auto; }
@@ -316,13 +339,18 @@
       <span class="tag inference" data-t="labels.inference"></span>
       <p data-t="workflow.note"></p>
     </div>
+    <div class="flow-note">
+      <span class="tag fact" data-t="labels.fact"></span>
+      <span class="tag inference" data-t="labels.inference"></span>
+      <p data-t="workflow.allTests"></p>
+    </div>
   </section>
 
   <!-- 05. Unclear -->
   <section class="panel" id="p-unclear" data-panel hidden aria-labelledby="h-unclear">
     <h2 id="h-unclear" tabindex="-1"><span class="sec-num">05</span><span data-t="unclear.heading"></span></h2>
-    <p class="lead"><span class="tag verify" data-t="labels.verify"></span></p>
-    <ul class="qlist" id="unclearList"></ul>
+    <p class="lead"><span class="tag verify" data-t="labels.verify"></span> <span data-t="unclear.lead"></span></p>
+    <div class="qgroups" id="unclearList"></div>
   </section>
 
   <!-- 06. Method -->
@@ -411,8 +439,8 @@ const CONTENT = {
         { short: "Paradox", stat: "7.0 → 6.6", teaser: "What happens to the total when you add the 11th pathogen", tags: ["inference"] },
         { short: "Impact", teaser: "Panel size, pricing units, reagent prices", tags: ["inference"] },
         { short: "Workflow", teaser: "Blood culture → Identification → Susceptibility → Molecular → PCT", tags: ["fact", "verify"] },
-        { short: "Open questions", stat: "5", teaser: "Open questions", tags: ["verify"] },
-        { short: "Method", teaser: "How I read the text and separated facts from inferences", tags: [] },
+        { short: "Open questions", stat: "{n}", teaser: "Open questions, grouped by workflow step", tags: ["verify"] },
+        { short: "Method", teaser: "How I read the text, plus all sources", tags: [] },
         { short: "About", teaser: "Who made this", tags: [] }
       ]
     },
@@ -482,27 +510,55 @@ const CONTENT = {
       heading: "Across the diagnostic workflow",
       lead: "Where the relevant pricing items sit. Steps with a dashed outline still need checking.",
       steps: [
-        { name: "Blood culture", status: "verify", items: ["Items 207, 209, 212"] },
-        { name: "Identification", status: "verify", items: ["Item 216"] },
-        { name: "Susceptibility testing", status: "verify", items: ["Item 217"] },
+        { name: "Blood culture", status: "verify", items: ["Items 207, 209, 212"],
+          implication: "Hospital revenue per culture depends on how provinces price it, not on the system used." },
+        { name: "Identification", status: "verify", items: ["Item 216"],
+          implication: "If the mass-spectrometry add-on applies to microbial ID, MALDI-TOF cost is better covered; if not, its value rests on the diagnostic report." },
+        { name: "Susceptibility testing", status: "verify", items: ["Item 217"],
+          implication: "MIC-based (quantitative) methods could earn more than qualitative ones." },
         { name: "Molecular testing", status: "fact", items: [
           "175 · PCR: per pathogen, tiered discount",
           "176 · Resistance genes: per locus",
           "190 · tNGS: per panel; 50 pathogens as the base unit, proportional increase for each additional 50; local caps",
           "191 · mNGS: per test"
-        ] },
+        ],
+          implication: "A 14-pathogen panel bills as 8.4 single tests; 11 pathogens (6.6) bill less than 10 (7.0)." },
         { name: "Immunoassay (PCT)", status: "verify", items: ["Item 322 · procalcitonin (PCT)"] }
       ],
-      note: "Item 176 (resistance genes, molecular) is not the same as item 217 (susceptibility testing, phenotypic)."
+      implicationLabel: "Possible implication",
+      questionsLink: "Open questions →",
+      note: "Item 176 (resistance genes, molecular) is not the same as item 217 (susceptibility testing, phenotypic).",
+      allTests: "All lab tests: hospitals must store and upload test data, or the fee is cut. This supports result sharing across hospitals and may reduce repeat testing over time."
     },
     unclear: {
       heading: "What is still unclear",
-      items: [
-        "How each province will implement the guideline",
-        "Whether panels with resistance genes add item 176 per locus",
-        "Reimbursement categories",
-        "How the RNA add-on is applied",
-        "How provincial prices will affect the choice between PCR, tNGS and mNGS"
+      lead: "Grouped by step of the workflow in section 04, plus questions that cut across all steps.",
+      // step: the step number in section 04 ("" for groups that are not a single step)
+      groups: [
+        { step: "1", name: "Blood culture", items: [
+          "Billed per bottle or per test?",
+          "Are aerobic and anaerobic bottles billed separately?"
+        ] },
+        { step: "2", name: "Identification", items: [
+          "An industry count puts all 44 mass-spectrometry add-ons outside microbiology. Does any apply to microbial identification?"
+        ] },
+        { step: "3", name: "Susceptibility testing", items: [
+          "Is there a quantitative add-on for susceptibility testing (MIC)?",
+          "Billed per strain or per drug?"
+        ] },
+        { step: "4", name: "Molecular testing", items: [
+          "What unit prices will provinces set for item 175?",
+          "Do resistance-gene targets add item 176 per locus?",
+          "How is the RNA add-on applied?"
+        ] },
+        { step: "All", name: "All lab tests", items: [
+          "How fast will provinces enforce the data-upload rule?"
+        ] },
+        { step: "+", name: "Across the system", items: [
+          "How each province will implement the guideline",
+          "Reimbursement categories",
+          "How provincial prices will affect the choice between PCR, tNGS and mNGS"
+        ] }
       ]
     },
     method: {
@@ -544,8 +600,8 @@ const CONTENT = {
         { short: "悖论", stat: "7.0 → 6.6", teaser: "增加第11种病原体后，总计费如何变化", tags: ["inference"] },
         { short: "影响", teaser: "检测组合规模 · 计价单位 · 试剂价格", tags: ["inference"] },
         { short: "流程", teaser: "血培养 → 鉴定 → 药敏 → 分子 → PCT", tags: ["fact", "verify"] },
-        { short: "待解问题", stat: "5", teaser: "个尚待解答的问题", tags: ["verify"] },
-        { short: "方法", teaser: "我如何阅读原文，并区分事实与推断", tags: [] },
+        { short: "待解问题", stat: "{n}", teaser: "个待解问题，按诊断流程分组", tags: ["verify"] },
+        { short: "方法", teaser: "我如何阅读原文，以及全部来源", tags: [] },
         { short: "关于", teaser: "关于作者", tags: [] }
       ]
     },
@@ -610,27 +666,54 @@ const CONTENT = {
       heading: "贯穿诊断流程",
       lead: "相关价格项目在诊断流程中的位置。虚线框中的环节仍需核实。",
       steps: [
-        { name: "血培养", status: "verify", items: ["第207、209、212项"] },
-        { name: "鉴定", status: "verify", items: ["第216项"] },
-        { name: "药敏试验", status: "verify", items: ["第217项"] },
+        { name: "血培养", status: "verify", items: ["第207、209、212项"],
+          implication: "医院每次血培养的收入取决于各省如何定价，而不是用了哪种仪器系统。" },
+        { name: "鉴定", status: "verify", items: ["第216项"],
+          implication: "如果质谱加收适用于微生物鉴定，MALDI-TOF的成本更容易收回；如果不适用，它的价值只能靠诊断报告体现。" },
+        { name: "药敏试验", status: "verify", items: ["第217项"],
+          implication: "能给出MIC数值的定量方法，收费可能高于定性方法。" },
         { name: "分子检测", status: "fact", items: [
           "175 · PCR：按病原体计价，阶梯折扣",
           "176 · 耐药基因：按位点计价",
           "190 · tNGS：按检测组合计价，以50种病原体为基本单位，每增加50种按比例增加，各地设上限",
           "191 · mNGS：按次计价"
-        ] },
+        ],
+          implication: "14种病原体的检测组合折合8.4次单项检测计费；11种（6.6）反而比10种（7.0）收费更低。" },
         { name: "免疫检测（PCT）", status: "verify", items: ["第322项 · 降钙素原（PCT）"] }
       ],
-      note: "第176项（耐药基因，分子检测）与第217项（药敏试验，表型检测）不是同一个项目。"
+      implicationLabel: "可能的影响",
+      questionsLink: "待解问题 →",
+      note: "第176项（耐药基因，分子检测）与第217项（药敏试验，表型检测）不是同一个项目。",
+      allTests: "所有检验：医院须存储并上传检验数据，否则减收费用。这有助于医院之间的结果互认，长期可能减少重复检测。"
     },
     unclear: {
       heading: "尚不明确的问题",
-      items: [
-        "各省将如何落实该指南",
-        "含耐药基因的检测组合是否需按位点另计第176项",
-        "医保报销类别",
-        "RNA加收如何适用",
-        "各省定价将如何影响PCR、tNGS与mNGS之间的选择"
+      lead: "按第04部分的诊断流程分组，另列贯穿所有环节的问题。",
+      groups: [
+        { step: "1", name: "血培养", items: [
+          "按瓶计费还是按次计费？",
+          "需氧瓶和厌氧瓶是否分开计费？"
+        ] },
+        { step: "2", name: "鉴定", items: [
+          "有行业统计称，44个质谱加收项目均不在微生物领域。是否有适用于微生物鉴定的质谱加收？"
+        ] },
+        { step: "3", name: "药敏试验", items: [
+          "药敏试验（MIC）是否有定量加收？",
+          "按菌株计费还是按药物计费？"
+        ] },
+        { step: "4", name: "分子检测", items: [
+          "各省将为第175项设定怎样的单价？",
+          "含耐药基因的检测组合是否需按位点另计第176项？",
+          "RNA加收如何适用？"
+        ] },
+        { step: "全", name: "所有检验", items: [
+          "各省将多快执行数据上传要求？"
+        ] },
+        { step: "+", name: "贯穿全局", items: [
+          "各省将如何落实该指南",
+          "医保报销类别",
+          "各省定价将如何影响PCR、tNGS与mNGS之间的选择"
+        ] }
       ]
     },
     method: {
@@ -701,6 +784,22 @@ const N = Array.from({ length: 30 }, (_, i) => i + 1);
 
 let lang = "en", chart = null, current = null;   // current: section index, or null = overview
 
+// Small line icons for the overview tiles (one per section id).
+const ICONS = {
+  rules:    '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/>',
+  chart:    '<path d="M4 20h16"/><path d="M5 16l4-4 4 3 6-7"/>',
+  impact:   '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
+  workflow: '<rect x="3" y="9" width="5" height="6" rx="1"/><rect x="16" y="9" width="5" height="6" rx="1"/><path d="M8 12h7"/><path d="M13 10l2 2-2 2"/>',
+  unclear:  '<circle cx="12" cy="12" r="9"/><path d="M9.6 9.5a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2-2.5 3.8"/><path d="M12 17.2h.01"/>',
+  method:   '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
+  about:    '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'
+};
+function icon(id) {
+  const span = el("span", "t-ic"); span.setAttribute("aria-hidden", "true");
+  span.innerHTML = '<svg viewBox="0 0 24 24">' + (ICONS[id] || "") + "</svg>";
+  return span;
+}
+
 // Small inline sparkline for the chart tile (computed from the same rule).
 function sparkline() {
   const W = 300, H = 86, P = 6, max = billed(30);
@@ -736,11 +835,14 @@ function render() {
     const a = el("a", "tile" + layout);
     a.href = "#" + s.id;
     const go = el("span", "t-go", "→"); go.setAttribute("aria-hidden", "true"); a.appendChild(go);
-    a.appendChild(el("span", "t-num", pad(i)));
+    const head = el("div", "t-head");
+    head.appendChild(icon(s.id)); head.appendChild(el("span", "t-num", pad(i)));
+    a.appendChild(head);
     a.appendChild(el("span", "t-title", get(T, s.heading)));
     const body = el("div", "t-body");
     const txt = el("div");
-    if (d.stat) txt.appendChild(el("div", "t-stat", d.stat));
+    const nQ = T.unclear.groups.reduce((n, g) => n + g.items.length, 0);
+    if (d.stat) txt.appendChild(el("div", "t-stat", fill(d.stat, { n: nQ })));
     txt.appendChild(el("div", "t-teaser", d.teaser));
     body.appendChild(txt);
     if (s.id === "chart") body.appendChild(sparkline());
@@ -792,8 +894,9 @@ function render() {
   const fl = document.getElementById("flow"); fl.textContent = "";
   T.workflow.steps.forEach((s, i) => {
     if (i > 0) { const a = el("li", "arrow"); a.setAttribute("aria-hidden", "true"); fl.appendChild(a); }
-    const li = el("li", "step is-" + s.status);
-    li.appendChild(el("h3", null, s.name));
+    const li = el("li", "step is-" + s.status + (s.items.length > 2 ? " wide" : ""));
+    const h = el("h3"); const chip = el("span", "qstep", String(i + 1)); chip.setAttribute("aria-hidden", "true");
+    h.appendChild(chip); h.appendChild(el("span", null, s.name)); li.appendChild(h);
     li.appendChild(tag(s.status, T));
     const ul = el("ul");
     s.items.forEach(it => {
@@ -804,16 +907,34 @@ function render() {
       ul.appendChild(item);
     });
     li.appendChild(ul);
+    if (s.implication) {
+      const im = el("div", "impl");
+      im.appendChild(tag("inference", T));
+      im.appendChild(el("p", null, s.implication));
+      li.appendChild(im);
+    }
+    const qa = el("a", "qlink", T.workflow.questionsLink); qa.href = "#unclear";
+    li.appendChild(qa);
     fl.appendChild(li);
   });
 
   // Unclear
-  const ul = document.getElementById("unclearList"); ul.textContent = "";
-  T.unclear.items.forEach(t => {
-    const li = el("li");
-    const q = el("span", "q", "?"); q.setAttribute("aria-hidden", "true");
-    li.appendChild(q); li.appendChild(el("span", null, t));
-    ul.appendChild(li);
+  const qg = document.getElementById("unclearList"); qg.textContent = "";
+  T.unclear.groups.forEach(g => {
+    const card = el("article", "qgroup" + (/^\d+$/.test(g.step) ? "" : " is-cross"));
+    const hd = el("header");
+    const chip = el("span", "qstep", g.step); chip.setAttribute("aria-hidden", "true");
+    hd.appendChild(chip); hd.appendChild(el("h3", null, g.name));
+    card.appendChild(hd);
+    const ul = el("ul", "qitems");
+    g.items.forEach(t => {
+      const li = el("li");
+      const q = el("span", "q", "?"); q.setAttribute("aria-hidden", "true");
+      li.appendChild(q); li.appendChild(el("span", null, t));
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+    qg.appendChild(card);
   });
 
   setText(document.querySelector('[data-t="chart.note14"]'), fill(T.chart.note14, { reg: ORIGINAL.nmpaReg }));

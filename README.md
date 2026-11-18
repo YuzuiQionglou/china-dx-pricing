@@ -45,7 +45,9 @@ Tips:
 - When a link in `LINKS` is still a placeholder, it shows as plain highlighted text. Once you put a
   real URL (starting with `https://`), it becomes a clickable link.
 - In chart strings, `{n}`, `{x}`, `{y}` and `{reg}` are filled in automatically. Keep them.
-- If you add a line to a list (for example `unclear.items`), add it in both `en` and `zh`.
+- If you add a line to a list (for example a question in `unclear.groups`), add it in both `en` and `zh`.
+- Open questions (section 05) are grouped by workflow step; `step` is the number shown on the step in section 04. The count on the overview tile is calculated automatically.
+- Each workflow step can have an optional `implication` (shown with an "Inference" label).
 - The chart is calculated from the rule in the `rate` function, not typed in by hand.
 - The overview tiles are in `CONTENT.<lang>.home.tiles`, one per section, in order:
   `short` (name on the section tabs and the previous/next buttons), `teaser`, optional `stat`
